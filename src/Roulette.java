@@ -1,7 +1,7 @@
 public class Roulette implements Subject {
   private Button[] buttonsList;
   private final int buttonLimit = 36; // 37 buttons, including the 0
-  //
+  private User user;
 
   @Override
   public void notifyObservers() {

@@ -1,5 +1,5 @@
-public interface Player {
+public interface Player extends Observer {
   public int getPlayerCredits();
-  public Bet getBet();
+  public Bet getBetObject();
   public void update();
 }
