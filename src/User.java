@@ -17,8 +17,13 @@ public class User implements Player{
   }
 
   @Override
-  public void update() {
-
+  public void update(Object obj) {
+    // if it's winning +
+    // if it's losing -
+    if(obj instanceof Roulette) {
+      System.out.println("fuck you");
+    }
+    playerCredits -= getBetObject().getBet();
   }
 
 }
