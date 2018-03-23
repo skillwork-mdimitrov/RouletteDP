@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ButtonFactoryTest {
-  private Button[] buttonsList = new Button[37];
+  private Button[] buttonsList = new Button[36];
 
   @Test
   void createSingleButton() {
