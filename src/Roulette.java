@@ -4,16 +4,22 @@ import java.util.List;
 
 public class Roulette implements Subject {
 
+  // ~~~ BUTTONS ~~~
   private Button[] buttonsList;
   private final int buttonLimit = 37; // including the 0
+
+  // ~~~ USERS ~~~
   private User user;
-  private boolean testing = false;
 
-  private List<Observer> observers;
-
-
+  // ~~~ ROULETTE ~~~
   private int winningNumber = 20; // hardcoded, needs to be random
   private int selectedNumber;
+
+  // ~~~ PATTERNS ~~~
+  private List<Observer> observers;
+
+  // ~~~ TESTING
+  private boolean testing = false;
 
   Roulette() {
     // ~~~ BUTTONS ~~~
@@ -39,6 +45,10 @@ public class Roulette implements Subject {
       }
     }
 
+    user.getBetObject().increaseBet();
+    user.getBetObject().increaseBet();
+    System.out.println(user.getBetObject().getBet());
+
   }
 
   // Make buttons
@@ -58,24 +68,24 @@ public class Roulette implements Subject {
 
   // ~~~ SETTERS ~~~
 
-  // Setter player number
+  /* Setter player number */
   public void setSelectedNumber(int selectedNumber) {
     this.selectedNumber = selectedNumber;
   }
 
-  // Setter winning number
+  /* Setter winning number */
   public void setWinningNumber(int winningNumber) {
     this.winningNumber = winningNumber;
   }
 
   // ~~~ GETTERS ~~~
 
-  // Get buttons
+  /* Get buttons */
   public Button[] getButtonsList() {
     return buttonsList;
   }
 
-  // Get the selected by the player number
+  /* Get the selected by the player number */
   public int getSelectedNumber() {
     return selectedNumber;
   }
@@ -117,7 +127,6 @@ public class Roulette implements Subject {
   public void notifyObservers() {
     Iterator<Observer> it = observers.iterator();
     while (it.hasNext()) {
-      System.out.println("WTF man");
       Observer observer = it.next();
       observer.update(this);
     }
@@ -132,8 +141,5 @@ public class Roulette implements Subject {
 
   }
 
-
-
-  // More Subject methods to come
 
 }

@@ -7,8 +7,19 @@ public class User implements Player{
     bet = new Bet();
   }
 
+  /* Get player credits */
   public int getPlayerCredits() {
     return playerCredits;
+  }
+
+  /* Set player credits */
+  public void adjustPlayerCredits(int howMuch, boolean increase) {
+    if(increase) {
+      this.playerCredits += howMuch;
+    }
+    else {
+      this.playerCredits -= howMuch;
+    }
   }
 
   @Override
@@ -20,9 +31,13 @@ public class User implements Player{
   public void update(Object obj) {
     // if it's winning +
     // if it's losing -
+
+    // When notifications are coming from the Roulette
     if(obj instanceof Roulette) {
-      System.out.println("fuck you");
+      // obj.something
+      // adjustPlayerCredits() accordingly
     }
+
     playerCredits -= getBetObject().getBet();
   }
 
