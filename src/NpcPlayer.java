@@ -1,16 +1,10 @@
-public class User implements Player{
+public class NpcPlayer implements Player{
   private int playerCredits; // react to changes, observer
   private Bet bet;
 
-  User() {
+  NpcPlayer() {
     playerCredits = 10000; // initial credits
     bet = new Bet();
-  }
-
-  @Override
-  /* Get player credits */
-  public int getPlayerCredits() {
-    return playerCredits;
   }
 
   /* Set player credits */
@@ -25,27 +19,29 @@ public class User implements Player{
   }
 
   @Override
+  /* Get player credits */
+  public int getPlayerCredits() {
+    return playerCredits;
+  }
+
+  @Override
+  /* Get bet */
   public Bet getBetObject() {
     return bet;
   }
 
   @Override
   public void update(Object obj) {
-
-    // Roulette is pushing the notifications
+    // Roulette pushing notifications
     if(obj instanceof Roulette) {
-      User user = ((Roulette) obj).getUser();
+      NpcPlayer npc = ((Roulette) obj).getNpc();
 
-      // Check if you have won from that spin
-      if(((Roulette) obj).didYouWin()) {
-        // You won, increase credits
-        adjustPlayerCredits(user.getBetObject().getBet(), true);
+      if(((Roulette) obj).didNPCWon()) {
+        npc.adjustPlayerCredits(npc.getBetObject().getBet(), true);
       }
       else {
-        // You lost, deduct credits
-        adjustPlayerCredits(user.getBetObject().getBet(), false);
+        npc.adjustPlayerCredits(npc.getBetObject().getBet(), false);
       }
     }
   }
-
 }

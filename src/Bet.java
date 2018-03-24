@@ -1,4 +1,5 @@
 // Who handles if bet goes below 0?
+// Remove confirmBet or do smth with it
 
 public class Bet {
   private int bet = 0; // initially 0

@@ -7,33 +7,28 @@ public class Roulette implements Subject {
   // ~~~ BUTTONS ~~~
   private Button[] buttonsList;
   private final int buttonLimit = 37; // including the 0
-
   // ~~~ USERS ~~~
   private User user;
-
+  private NpcPlayer npc;
   // ~~~ ROULETTE ~~~
   private int winningNumber = 20; // hardcoded, needs to be random
-  private int selectedNumber;
-
+  private int selectedNumber; // Player's number
+  private int npcSelectedNumber; // NPC's number
+  private boolean youWon = false;
+  private boolean npcWon = false;
   // ~~~ PATTERNS ~~~
   private List<Observer> observers;
-
   // ~~~ TESTING
   private boolean testing = false;
 
   Roulette() {
-    // ~~~ BUTTONS ~~~
-    buttonsList = new Button[buttonLimit]; // set the size of the button list
+    buttonsList = new Button[buttonLimit]; // Instantiate array, set the size of the button list
     makeButtons();
-
-    // ~~~ PLAYERS ~~~
     user = new User(); // Create the user playing
-
-    // ~~~ OBSERVER ~~~
+    npc = new NpcPlayer(); // Create the NPC
     observers = new ArrayList<Observer>();
-    register(user); // add the user to the list of observers
-
-    // ~~~ ROULETTE ~~~
+    register(user); // let the user observe
+    register(npc); // let the npc observe
     spinRoulette();
 
     // Create the NPC
@@ -44,10 +39,6 @@ public class Roulette implements Subject {
         System.out.println(element);
       }
     }
-
-    user.getBetObject().increaseBet();
-    user.getBetObject().increaseBet();
-    System.out.println(user.getBetObject().getBet());
 
   }
 
@@ -68,12 +59,17 @@ public class Roulette implements Subject {
 
   // ~~~ SETTERS ~~~
 
-  /* Setter player number */
+  /* Set player number */
   public void setSelectedNumber(int selectedNumber) {
     this.selectedNumber = selectedNumber;
   }
 
-  /* Setter winning number */
+  /* Set NPC number */
+  public void setNpcSelectedNumber(int npcSelectedNumber) {
+    this.npcSelectedNumber = npcSelectedNumber;
+  }
+
+  /* Set winning number */
   public void setWinningNumber(int winningNumber) {
     this.winningNumber = winningNumber;
   }
@@ -85,9 +81,14 @@ public class Roulette implements Subject {
     return buttonsList;
   }
 
-  /* Get the selected by the player number */
+  /* Get player number (the number he is betting on) */
   public int getSelectedNumber() {
     return selectedNumber;
+  }
+
+  /* Get the NPC number (what is he betting on) */
+  public int getNpcSelectedNumber() {
+    return npcSelectedNumber;
   }
 
   // Get the winning number
@@ -95,15 +96,46 @@ public class Roulette implements Subject {
     return winningNumber;
   }
 
+  // Find if you win or not
+  public boolean didYouWin() {
+    return youWon;
+  }
+
+  // Find if the NPC won or not
+  public boolean didNPCWon() {
+    return npcWon;
+  }
+
+  // Get user object
+  public User getUser() {
+    return user;
+  }
+
+  // Get NPC object
+  public NpcPlayer getNpc() {
+    return npc;
+  }
+
+  // Play the game
   public void spinRoulette() {
+    // Player
     if(getSelectedNumber() == getWinningNumber()) {
-      // you won some credits
-      notifyObservers();
+      youWon = true;
     }
     else {
-      // you lost some credits
-      notifyObservers();
+      youWon = false;
     }
+
+    // NPC
+    if(getNpcSelectedNumber() == getWinningNumber()) {
+      npcWon = true;
+    }
+    else {
+      npcWon = false;
+    }
+
+    // Time to notify about the changes
+    notifyObservers();
   }
 
   @Override
@@ -123,23 +155,11 @@ public class Roulette implements Subject {
   }
 
   @Override
-  // check this ...
   public void notifyObservers() {
     Iterator<Observer> it = observers.iterator();
     while (it.hasNext()) {
       Observer observer = it.next();
       observer.update(this);
     }
-
-//    // to implement
-//    switch (results) {
-//      case "win":
-//
-//      case "lose":
-//        // blabla
-//    }
-
   }
-
-
 }
