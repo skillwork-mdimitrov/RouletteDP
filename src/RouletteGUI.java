@@ -33,6 +33,13 @@ public class RouletteGUI implements ActionListener{
     contentPane.add(rouletteLabel, contentPane);
 
     // add buttons and their listeners
+    contentPane.add(increaseBetBtn);
+    contentPane.add(decreaseBetBtn);
+    // listener increaseBtn
+    // listener decreaseBtn
+    increaseBetBtn.addActionListener(this);
+    decreaseBetBtn.addActionListener(this);
+
     // contentPane.add(button);
     // button.addActionListener(this);
 
@@ -52,8 +59,12 @@ public class RouletteGUI implements ActionListener{
     return roulette;
   }
 
-  public void actionPerformed(ActionEvent e)
-  {
-
+  public void actionPerformed(ActionEvent e) {
+    if(e.getSource() == increaseBetBtn) {
+      System.out.println("Increase btn pressed");
+    }
+    if(e.getSource() == decreaseBetBtn) {
+      System.out.println("Decrease btn pressed");
+    }
   }
 }
