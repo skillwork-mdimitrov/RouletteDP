@@ -107,13 +107,13 @@ public class Roulette implements Subject {
   public void makeButtons() {
     for(int i=0; i<buttonLimit; i++) {
       if(i==0) {
-        buttonsList[0] = ButtonFactory.createButton("green");
+        buttonsList[0] = ButtonFactory.createButton("green", 0);
       }
       else if(i%2 == 0) {
-        buttonsList[i] = ButtonFactory.createButton("black");
+        buttonsList[i] = ButtonFactory.createButton("black", i );
       }
       else {
-        buttonsList[i] = ButtonFactory.createButton("red");
+        buttonsList[i] = ButtonFactory.createButton("red", i);
       }
     }
   }

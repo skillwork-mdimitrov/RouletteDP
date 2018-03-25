@@ -6,10 +6,13 @@ public class RouletteGUI implements ActionListener{
   private Roulette roulette;
   private JFrame frame;
   private JLabel rouletteLabel;
+  // ~~~ Buttons ~~~
   private JButton increaseBetBtn;
   private JButton decreaseBetBtn;
+  private JButton numberBtn;
 
   RouletteGUI() {
+    roulette = new Roulette();
     rouletteLabel = new JLabel();
     increaseBetBtn = new JButton("+");
     decreaseBetBtn = new JButton("-");
@@ -24,7 +27,9 @@ public class RouletteGUI implements ActionListener{
     Container contentPane = frame.getContentPane();
 
     // set the layout
-    contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+    FlowLayout rouletteLayout = new FlowLayout();
+    contentPane.setLayout(rouletteLayout);
+    contentPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
     // cosmetic section
     contentPane.setBackground(Color.LIGHT_GRAY);
@@ -33,12 +38,17 @@ public class RouletteGUI implements ActionListener{
     contentPane.add(rouletteLabel, contentPane);
 
     // add buttons and their listeners
+
+    // increase and decrease buttons
     contentPane.add(increaseBetBtn);
     contentPane.add(decreaseBetBtn);
-    // listener increaseBtn
-    // listener decreaseBtn
     increaseBetBtn.addActionListener(this);
     decreaseBetBtn.addActionListener(this);
+
+    // Number buttons you can pick
+    for(Button element : roulette.getButtonsList()) {
+      contentPane.add(createButton(numberBtn, element.getNumber() + ""));
+    }
 
     // contentPane.add(button);
     // button.addActionListener(this);
@@ -50,6 +60,11 @@ public class RouletteGUI implements ActionListener{
     Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setLocation(d.width/2 - frame.getWidth()/2, d.height/2 - frame.getHeight()/2);
     frame.setVisible(true);
+  }
+
+  private JButton createButton(JButton btn, String text) {
+    btn = new JButton(text);
+    return btn;
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,6 +80,9 @@ public class RouletteGUI implements ActionListener{
     }
     if(e.getSource() == decreaseBetBtn) {
       System.out.println("Decrease btn pressed");
+    }
+    if(e.getSource() == numberBtn) {
+      System.out.println("Number btn pressed");
     }
   }
 }

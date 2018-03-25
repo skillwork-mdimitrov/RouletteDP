@@ -10,14 +10,14 @@ class ButtonFactoryTest {
 
   @Test
   void createSingleButton() {
-    Button blackButton = ButtonFactory.createButton("black");
+    Button blackButton = ButtonFactory.createButton("black", 10);
     assertNotNull(blackButton);
   }
 
   @Test
   void createMultipleButtons() {
     for(int i=0;i<10;i++) {
-      buttonsList[i] = ButtonFactory.createButton("black");
+      buttonsList[i] = ButtonFactory.createButton("black", i);
       assertNotNull(buttonsList[i]);
     }
   }

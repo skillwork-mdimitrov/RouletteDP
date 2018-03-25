@@ -14,7 +14,7 @@ class RouletteTest {
   @Test
   void makeButtons() {
     for(int i=0;i<buttonLimit;i++) {
-      ButtonFactory.createButton("black");
+      ButtonFactory.createButton("black", i);
     }
   }
 
