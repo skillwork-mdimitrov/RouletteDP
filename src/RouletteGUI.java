@@ -10,12 +10,15 @@ public class RouletteGUI implements ActionListener{
   private JButton increaseBetBtn;
   private JButton decreaseBetBtn;
   private JButton numberBtn;
+  private JButton lockNumber;
 
   RouletteGUI() {
     roulette = new Roulette();
     rouletteLabel = new JLabel();
     increaseBetBtn = new JButton("+");
     decreaseBetBtn = new JButton("-");
+    numberBtn = new JButton();
+    lockNumber = new JButton("Lock");
 
     // Add text to the labels
     this.rouletteLabel.setText("Roulette");
@@ -39,19 +42,18 @@ public class RouletteGUI implements ActionListener{
 
     // add buttons and their listeners
 
-    // increase and decrease buttons
+    // Buttons
     contentPane.add(increaseBetBtn);
     contentPane.add(decreaseBetBtn);
+    contentPane.add(lockNumber);
     increaseBetBtn.addActionListener(this);
     decreaseBetBtn.addActionListener(this);
+    lockNumber.addActionListener(this);
 
     // Number buttons you can pick
     for(Button element : roulette.getButtonsList()) {
       contentPane.add(createButton(numberBtn, element.getNumber() + ""));
     }
-
-    // contentPane.add(button);
-    // button.addActionListener(this);
 
     // set the initial frame size
     frame.setSize(1100, 560);
@@ -62,9 +64,11 @@ public class RouletteGUI implements ActionListener{
     frame.setVisible(true);
   }
 
+  // Create buttons with their action listeners
   private JButton createButton(JButton btn, String text) {
-    btn = new JButton(text);
-    return btn;
+    numberBtn = new JButton(text);
+    numberBtn.addActionListener(this);
+    return numberBtn;
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,8 +85,11 @@ public class RouletteGUI implements ActionListener{
     if(e.getSource() == decreaseBetBtn) {
       System.out.println("Decrease btn pressed");
     }
-    if(e.getSource() == numberBtn) {
-      System.out.println("Number btn pressed");
+    if(e.getSource() == lockNumber) {
+      System.out.println("Lock btn pressed");
+      // set number to user = e.getActionCommand
     }
+    System.out.println(e.getActionCommand());
+
   }
 }
