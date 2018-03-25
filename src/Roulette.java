@@ -131,9 +131,6 @@ public class Roulette implements Subject {
 
   // Play the game
   public void spinRoulette() {
-    for(int i=0;i<observers.size();i++){
-      System.out.println(observers.get(i));
-    }
     // Player
     if(getSelectedNumber() == getWinningNumber()) {
       youWon = true;
@@ -164,6 +161,7 @@ public class Roulette implements Subject {
     }
   }
 
+  @Override
   public void unregister(Observer observer) {
     if(observer != null) {
       this.observers.remove(observer);

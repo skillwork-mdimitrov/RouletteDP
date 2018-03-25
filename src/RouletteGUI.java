@@ -20,6 +20,7 @@ public class RouletteGUI implements ActionListener, Observer{
   RouletteGUI() {
     roulette = new Roulette();
     roulette.register(this);
+    roulette.getUser().getBetObject().register(this);
 
     // ~~~ Labels ~~~
     rouletteLabel = new JLabel();
@@ -72,7 +73,7 @@ public class RouletteGUI implements ActionListener, Observer{
     lockNumberBtn.addActionListener(this);
     spinRouletteBtn.addActionListener(this);
 
-    // Number buttons you can pick
+    // The 37 buttons you can pick the number you want from
     for(Button element : roulette.getButtonsList()) {
       contentPane.add(createButton(numberBtn, element.getNumber() + ""));
     }
@@ -107,11 +108,11 @@ public class RouletteGUI implements ActionListener, Observer{
       System.out.println(roulette.getUser().getBetObject().getBet());
     }
     if(e.getSource() == decreaseBetBtn) {
-      System.out.println("Decrease btn pressed");
+      roulette.getUser().getBetObject().decreaseBet();
     }
     if(e.getSource() == lockNumberBtn) {
-      System.out.println("Lock btn pressed");
       roulette.setNumberLocked(true);
+      roulette.getUser().getBetObject().confirmBet();
     }
     if(e.getSource() == spinRouletteBtn) {
       System.out.println("Spinning the roulette!");
@@ -129,7 +130,10 @@ public class RouletteGUI implements ActionListener, Observer{
   @Override
   public void update(Object obj) {
     if(obj instanceof Roulette) {
-      betAmountLbl.setText(9999 + "");
+
+    }
+    if(obj instanceof Bet) {
+      betAmountLbl.setText(roulette.getUser().getBetObject().getBet() + "");
     }
   }
 }
