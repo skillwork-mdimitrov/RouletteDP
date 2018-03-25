@@ -28,16 +28,16 @@ public class RouletteGUI implements ActionListener, Observer{
     rouletteLabel.setText("Roulette");
 
     yourAmountLbl = new JLabel();
-    yourAmountLbl.setText("Your amount: " + roulette.getUser().getPlayerCredits());
+    yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
 
     npcAmountLbl = new JLabel();
-    npcAmountLbl.setText("NPC amount: " + roulette.getNpc().getPlayerCredits());
+    npcAmountLbl.setText("|| NPC amount: " + roulette.getNpc().getPlayerCredits() + "||");
 
     betAmountLbl = new JLabel();
-    betAmountLbl.setText("Bet: " + roulette.getUser().getBetObject().getBet());
+    betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
 
     selecteNumberLbl = new JLabel();
-    selecteNumberLbl.setText("You've chosen: *Choose number*");
+    selecteNumberLbl.setText("|| Choose a number ||");
 
     // ~~~ Buttons ~~
     increaseBetBtn = new JButton("+");
@@ -84,7 +84,7 @@ public class RouletteGUI implements ActionListener, Observer{
     }
 
     // set the initial frame size
-    frame.setSize(1100, 560);
+    frame.setSize(1100, 150);
 
     // center the frame and make it visible
     Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -132,11 +132,11 @@ public class RouletteGUI implements ActionListener, Observer{
   @Override
   public void update(Object obj) {
     if(obj instanceof Roulette) {
-      yourAmountLbl.setText("Your amount: " + roulette.getUser().getPlayerCredits() + "");
-      npcAmountLbl.setText("Npc amount: " + roulette.getNpc().getPlayerCredits() + "");
+      yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
+      npcAmountLbl.setText("|| Npc amount: " + roulette.getNpc().getPlayerCredits() + "||");
     }
     if(obj instanceof Bet) {
-      betAmountLbl.setText("Bet: " + roulette.getUser().getBetObject().getBet() + "");
+      betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
     }
   }
 }
