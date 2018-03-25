@@ -20,6 +20,11 @@ public class Bet {
     confirmedBet = true;
   }
 
+  // Reset bet
+  public void resetBet() {
+    bet = 0;
+  }
+
   // Retrieve how much is the bet
   public int getBet() {
     return bet;

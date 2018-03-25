@@ -7,15 +7,14 @@ public class NpcPlayer implements Player{
     bet = new Bet();
   }
 
-  /* Set player credits */
-  public void adjustPlayerCredits(int byHowMuch, boolean increase) {
-    if(increase) {
-      this.playerCredits += byHowMuch;
-    }
-    // Decrease
-    else {
-      this.playerCredits -= byHowMuch;
-    }
+  /* Increase player credits */
+  public void increasePlayerCredits(int byHowMuch) {
+    this.playerCredits += byHowMuch;
+  }
+
+  /* Decrease player credits */
+  public void decreasePlayerCredits(int byHowMuch) {
+    this.playerCredits -= byHowMuch;
   }
 
   @Override
@@ -37,11 +36,13 @@ public class NpcPlayer implements Player{
       NpcPlayer npc = ((Roulette) obj).getNpc();
 
       if(((Roulette) obj).didNPCWon()) {
-        npc.adjustPlayerCredits(npc.getBetObject().getBet(), true);
+        npc.increasePlayerCredits(npc.getBetObject().getBet());
       }
       else {
-        npc.adjustPlayerCredits(npc.getBetObject().getBet(), false);
+        npc.decreasePlayerCredits(npc.getBetObject().getBet());
       }
+      // Reset bet needed
+      npc.getBetObject().resetBet();
     }
   }
 }

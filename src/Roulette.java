@@ -42,22 +42,7 @@ public class Roulette implements Subject {
 
   }
 
-  // Make buttons
-  public void makeButtons() {
-    for(int i=0; i<buttonLimit; i++) {
-      if(i==0) {
-        buttonsList[0] = ButtonFactory.createButton("green");
-      }
-      else if(i%2 == 0) {
-        buttonsList[i] = ButtonFactory.createButton("black");
-      }
-      else {
-        buttonsList[i] = ButtonFactory.createButton("red");
-      }
-    }
-  }
-
-  // ~~~ SETTERS ~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   /* Set player number */
   public void setSelectedNumber(int selectedNumber) {
@@ -74,7 +59,7 @@ public class Roulette implements Subject {
     this.winningNumber = winningNumber;
   }
 
-  // ~~~ GETTERS ~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   /* Get buttons */
   public Button[] getButtonsList() {
@@ -116,6 +101,23 @@ public class Roulette implements Subject {
     return npc;
   }
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  // Make buttons
+  public void makeButtons() {
+    for(int i=0; i<buttonLimit; i++) {
+      if(i==0) {
+        buttonsList[0] = ButtonFactory.createButton("green");
+      }
+      else if(i%2 == 0) {
+        buttonsList[i] = ButtonFactory.createButton("black");
+      }
+      else {
+        buttonsList[i] = ButtonFactory.createButton("red");
+      }
+    }
+  }
+
   // Play the game
   public void spinRoulette() {
     // Player
@@ -134,7 +136,7 @@ public class Roulette implements Subject {
       npcWon = false;
     }
 
-    // Time to notify about the changes
+    // Time to notify observers about the changes
     notifyObservers();
   }
 

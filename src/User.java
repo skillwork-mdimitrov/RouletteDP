@@ -13,15 +13,14 @@ public class User implements Player{
     return playerCredits;
   }
 
-  /* Set player credits */
-  public void adjustPlayerCredits(int byHowMuch, boolean increase) {
-    if(increase) {
-      this.playerCredits += byHowMuch;
-    }
-    // Decrease
-    else {
-      this.playerCredits -= byHowMuch;
-    }
+  /* Increase player credits */
+  public void increasePlayerCredits(int byHowMuch) {
+    this.playerCredits += byHowMuch;
+  }
+
+  /* Decrease player credits */
+  public void decreasePlayerCredits(int byHowMuch) {
+    this.playerCredits -= byHowMuch;
   }
 
   @Override
@@ -39,11 +38,11 @@ public class User implements Player{
       // Check if you have won from that spin
       if(((Roulette) obj).didYouWin()) {
         // You won, increase credits
-        adjustPlayerCredits(user.getBetObject().getBet(), true);
+        user.increasePlayerCredits(user.getBetObject().getBet());
       }
       else {
         // You lost, deduct credits
-        adjustPlayerCredits(user.getBetObject().getBet(), false);
+        user.decreasePlayerCredits(user.getBetObject().getBet());
       }
     }
   }

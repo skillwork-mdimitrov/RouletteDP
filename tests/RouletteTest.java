@@ -57,4 +57,14 @@ class RouletteTest {
     assertEquals(11500, roulette.getNpc().getPlayerCredits());
   }
 
+  @Test
+  void makeBetAndResetBet() {
+    roulette.getNpc().getBetObject().increaseBet(); // bet 500
+    roulette.setNpcSelectedNumber(20); // winning number
+    roulette.spinRoulette(); // play the game
+    assertEquals(10500, roulette.getNpc().getPlayerCredits()); // check if you won 500
+    roulette.spinRoulette(); // play the game again
+    assertEquals(10500, roulette.getNpc().getPlayerCredits()); // check if you have same credits, since bet was reset
+  }
+
 }

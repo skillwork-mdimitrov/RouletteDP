@@ -20,10 +20,4 @@ class UserTest {
     user.getBetObject().increaseBet();
     assertEquals(500, user.getBetObject().getBet());
   }
-
-  @Test
-  void update() {
-
-  }
-
 }
