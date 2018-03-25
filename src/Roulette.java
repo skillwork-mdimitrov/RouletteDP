@@ -16,7 +16,8 @@ public class Roulette implements Subject {
   private int npcSelectedNumber; // NPC's number
   private boolean youWon = false;
   private boolean npcWon = false;
-  // ~~~ PATTERNS ~~~
+  private boolean numberLocked = false;
+  private RouletteGUI rouletteGUI;
   private List<Observer> observers;
   // ~~~ TESTING
   private boolean testing = false;
@@ -26,12 +27,12 @@ public class Roulette implements Subject {
     makeButtons();
     user = new User(); // Create the user playing
     npc = new NpcPlayer(); // Create the NPC
+    // rouletteGUI = new RouletteGUI(); // Create the RouletteGUI (just to send notifications)
     observers = new ArrayList<Observer>();
+
+    // Register observers
     register(user); // let the user observe
     register(npc); // let the npc observe
-    spinRoulette();
-
-    // Create the NPC
 
     // Testing
     if(testing) {
@@ -57,6 +58,11 @@ public class Roulette implements Subject {
   /* Set winning number */
   public void setWinningNumber(int winningNumber) {
     this.winningNumber = winningNumber;
+  }
+
+  /* Lock the selected number */
+  public void setNumberLocked(boolean numberLocked) {
+    this.numberLocked = numberLocked;
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,6 +107,11 @@ public class Roulette implements Subject {
     return npc;
   }
 
+  // Get selected number lock status
+  public boolean isNumberLocked() {
+    return numberLocked;
+  }
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   // Make buttons
@@ -120,6 +131,9 @@ public class Roulette implements Subject {
 
   // Play the game
   public void spinRoulette() {
+    for(int i=0;i<observers.size();i++){
+      System.out.println(observers.get(i));
+    }
     // Player
     if(getSelectedNumber() == getWinningNumber()) {
       youWon = true;

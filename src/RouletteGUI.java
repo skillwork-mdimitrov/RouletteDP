@@ -2,26 +2,45 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class RouletteGUI implements ActionListener{
+public class RouletteGUI implements ActionListener, Observer{
   private Roulette roulette;
   private JFrame frame;
+  // ~~ Labels
   private JLabel rouletteLabel;
+  private JLabel yourAmountLbl;
+  private JLabel npcAmountLbl;
+  private JLabel betAmountLbl;
   // ~~~ Buttons ~~~
   private JButton increaseBetBtn;
   private JButton decreaseBetBtn;
   private JButton numberBtn;
-  private JButton lockNumber;
+  private JButton lockNumberBtn;
+  private JButton spinRouletteBtn;
 
   RouletteGUI() {
     roulette = new Roulette();
+    roulette.register(this);
+
+    // ~~~ Labels ~~~
     rouletteLabel = new JLabel();
+    rouletteLabel.setText("Roulette");
+
+    yourAmountLbl = new JLabel();
+    yourAmountLbl.setText("Your amount: " + roulette.getUser().getPlayerCredits());
+
+    npcAmountLbl = new JLabel();
+    npcAmountLbl.setText("NPC amount: " + roulette.getNpc().getPlayerCredits());
+
+    betAmountLbl = new JLabel();
+    betAmountLbl.setText("Bet: " + roulette.getUser().getBetObject().getBet());
+
+    // ~~~ Buttons ~~
     increaseBetBtn = new JButton("+");
     decreaseBetBtn = new JButton("-");
+    lockNumberBtn = new JButton("Lock");
+    spinRouletteBtn = new JButton("Spin roulette!");
     numberBtn = new JButton();
-    lockNumber = new JButton("Lock");
 
-    // Add text to the labels
-    this.rouletteLabel.setText("Roulette");
     makeFrame(); // don't move upwards
   }
 
@@ -37,18 +56,21 @@ public class RouletteGUI implements ActionListener{
     // cosmetic section
     contentPane.setBackground(Color.LIGHT_GRAY);
 
-    // add text/labels to the content panel
-    contentPane.add(rouletteLabel, contentPane);
-
-    // add buttons and their listeners
+    // add labels to the content panel
+    contentPane.add(rouletteLabel, contentPane); // mby redundant
+    contentPane.add(yourAmountLbl, contentPane);
+    contentPane.add(npcAmountLbl, contentPane);
+    contentPane.add(betAmountLbl, contentPane);
 
     // Buttons
     contentPane.add(increaseBetBtn);
     contentPane.add(decreaseBetBtn);
-    contentPane.add(lockNumber);
+    contentPane.add(lockNumberBtn);
+    contentPane.add(spinRouletteBtn);
     increaseBetBtn.addActionListener(this);
     decreaseBetBtn.addActionListener(this);
-    lockNumber.addActionListener(this);
+    lockNumberBtn.addActionListener(this);
+    spinRouletteBtn.addActionListener(this);
 
     // Number buttons you can pick
     for(Button element : roulette.getButtonsList()) {
@@ -81,15 +103,33 @@ public class RouletteGUI implements ActionListener{
   public void actionPerformed(ActionEvent e) {
     if(e.getSource() == increaseBetBtn) {
       System.out.println("Increase btn pressed");
+      roulette.getUser().getBetObject().increaseBet();
+      System.out.println(roulette.getUser().getBetObject().getBet());
     }
     if(e.getSource() == decreaseBetBtn) {
       System.out.println("Decrease btn pressed");
     }
-    if(e.getSource() == lockNumber) {
+    if(e.getSource() == lockNumberBtn) {
       System.out.println("Lock btn pressed");
-      // set number to user = e.getActionCommand
+      roulette.setNumberLocked(true);
     }
-    System.out.println(e.getActionCommand());
+    if(e.getSource() == spinRouletteBtn) {
+      System.out.println("Spinning the roulette!");
+      roulette.spinRoulette();
+    }
 
+    if(!roulette.isNumberLocked()) {
+      try {
+        roulette.setSelectedNumber(Integer.parseInt(e.getActionCommand()));
+        System.out.println("Selected number is " + roulette.getSelectedNumber());
+      } catch (Exception ex) { }
+    }
+  }
+
+  @Override
+  public void update(Object obj) {
+    if(obj instanceof Roulette) {
+      betAmountLbl.setText(9999 + "");
+    }
   }
 }
