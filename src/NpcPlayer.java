@@ -1,6 +1,7 @@
 public class NpcPlayer implements Player{
   private int playerCredits; // react to changes, observer
   private Bet bet;
+  private NpcBetStrategy strategy;
 
   NpcPlayer() {
     playerCredits = 10000; // initial credits
@@ -41,8 +42,30 @@ public class NpcPlayer implements Player{
       else {
         npc.decreasePlayerCredits(npc.getBetObject().getBet());
       }
-      // Reset bet needed
+      // Reset the bet
       npc.getBetObject().resetBet();
+      // Make a bet, accordingly to credits
+      npc.getBetObject().setBet(strategicallyMakeBet());
     }
+  }
+
+  private int strategicallyMakeBet() {
+    int theBet = 500; // default bet
+    // NPC is playing it safe
+    if(getPlayerCredits() < 2000) {
+      strategy = new NpcLowBetStrategy();
+      theBet = strategy.getBetAmount();
+    }
+    // NPC is doing okay
+    else if(getPlayerCredits() > 2000 && getPlayerCredits() <= 10000) {
+      strategy = new NpcMediumBetStrategy();
+      theBet = strategy.getBetAmount();
+    }
+    // NPC feels adventurous
+    else {
+      strategy = new NpcBerserkBetStrategy();
+      theBet = strategy.getBetAmount();
+    }
+    return theBet;
   }
 }

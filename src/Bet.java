@@ -15,6 +15,10 @@ public class Bet {
     bet -= 500;
   }
 
+  public void setBet(int bet) {
+    this.bet = bet;
+  }
+
   // Finalize the bet
   public void confirmBet() {
     confirmedBet = true;

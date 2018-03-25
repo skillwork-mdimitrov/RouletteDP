@@ -39,32 +39,28 @@ class RouletteTest {
   @Test
   // NPC
   void npcMakeLosingBet() {
-    roulette.getNpc().getBetObject().increaseBet(); // bet 500
-    roulette.getNpc().getBetObject().increaseBet(); // bet 500 more
     roulette.setNpcSelectedNumber(40); // No match
-    roulette.spinRoulette();
-    assertEquals(9000, roulette.getNpc().getPlayerCredits());
+    roulette.spinRoulette(); // Play the game
+    /* NPC starting with 10000, he will use the Medium strategy and bet 1500, which he will lose */
+    assertEquals(8500, roulette.getNpc().getPlayerCredits());
   }
 
   @Test
   // NPC
   void npcMakeWinningBet() {
-    roulette.getNpc().getBetObject().increaseBet(); // bet 500
-    roulette.getNpc().getBetObject().increaseBet(); // bet 500 more
-    roulette.getNpc().getBetObject().increaseBet(); // more
     roulette.setNpcSelectedNumber(20); // Winning number
-    roulette.spinRoulette();
+    roulette.spinRoulette(); // Play the game
+    /* NPC starting with 10000, he will use the Medium strategy and bet 1500, which he will win */
     assertEquals(11500, roulette.getNpc().getPlayerCredits());
   }
 
   @Test
-  void makeBetAndResetBet() {
-    roulette.getNpc().getBetObject().increaseBet(); // bet 500
+  void npcStrategicBets() {
     roulette.setNpcSelectedNumber(20); // winning number
     roulette.spinRoulette(); // play the game
-    assertEquals(10500, roulette.getNpc().getPlayerCredits()); // check if you won 500
-    roulette.spinRoulette(); // play the game again
-    assertEquals(10500, roulette.getNpc().getPlayerCredits()); // check if you have same credits, since bet was reset
+    assertEquals(11500, roulette.getNpc().getPlayerCredits()); // check if you won 1500 (Medium bet)
+    roulette.spinRoulette(); // play the game again, NPC now bets 2500 since his credits are above 10 000
+    assertEquals(14000, roulette.getNpc().getPlayerCredits());
   }
 
 }
