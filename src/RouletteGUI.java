@@ -10,6 +10,7 @@ public class RouletteGUI implements ActionListener, Observer{
   private JLabel yourAmountLbl;
   private JLabel npcAmountLbl;
   private JLabel betAmountLbl;
+  private JLabel selecteNumberLbl;
   // ~~~ Buttons ~~~
   private JButton increaseBetBtn;
   private JButton decreaseBetBtn;
@@ -34,6 +35,9 @@ public class RouletteGUI implements ActionListener, Observer{
 
     betAmountLbl = new JLabel();
     betAmountLbl.setText("Bet: " + roulette.getUser().getBetObject().getBet());
+
+    selecteNumberLbl = new JLabel();
+    selecteNumberLbl.setText("You've chosen: *Choose number*");
 
     // ~~~ Buttons ~~
     increaseBetBtn = new JButton("+");
@@ -62,6 +66,7 @@ public class RouletteGUI implements ActionListener, Observer{
     contentPane.add(yourAmountLbl, contentPane);
     contentPane.add(npcAmountLbl, contentPane);
     contentPane.add(betAmountLbl, contentPane);
+    contentPane.add(selecteNumberLbl, contentPane);
 
     // Buttons
     contentPane.add(increaseBetBtn);
@@ -103,9 +108,7 @@ public class RouletteGUI implements ActionListener, Observer{
 
   public void actionPerformed(ActionEvent e) {
     if(e.getSource() == increaseBetBtn) {
-      System.out.println("Increase btn pressed");
       roulette.getUser().getBetObject().increaseBet();
-      System.out.println(roulette.getUser().getBetObject().getBet());
     }
     if(e.getSource() == decreaseBetBtn) {
       roulette.getUser().getBetObject().decreaseBet();
@@ -115,14 +118,13 @@ public class RouletteGUI implements ActionListener, Observer{
       roulette.getUser().getBetObject().confirmBet();
     }
     if(e.getSource() == spinRouletteBtn) {
-      System.out.println("Spinning the roulette!");
       roulette.spinRoulette();
     }
 
     if(!roulette.isNumberLocked()) {
       try {
         roulette.setSelectedNumber(Integer.parseInt(e.getActionCommand()));
-        System.out.println("Selected number is " + roulette.getSelectedNumber());
+        selecteNumberLbl.setText("Your number: " + roulette.getSelectedNumber() + "");
       } catch (Exception ex) { }
     }
   }
@@ -130,10 +132,11 @@ public class RouletteGUI implements ActionListener, Observer{
   @Override
   public void update(Object obj) {
     if(obj instanceof Roulette) {
-
+      yourAmountLbl.setText("Your amount: " + roulette.getUser().getPlayerCredits() + "");
+      npcAmountLbl.setText("Npc amount: " + roulette.getNpc().getPlayerCredits() + "");
     }
     if(obj instanceof Bet) {
-      betAmountLbl.setText(roulette.getUser().getBetObject().getBet() + "");
+      betAmountLbl.setText("Bet: " + roulette.getUser().getBetObject().getBet() + "");
     }
   }
 }

@@ -35,6 +35,8 @@ public class NpcPlayer implements Player{
     // Roulette pushing notifications
     if(obj instanceof Roulette) {
       NpcPlayer npc = ((Roulette) obj).getNpc();
+      // Make a bet, accordingly to credits
+      npc.getBetObject().setBet(strategicallyMakeBet());
 
       if(((Roulette) obj).didNPCWon()) {
         npc.increasePlayerCredits(npc.getBetObject().getBet());
@@ -44,8 +46,8 @@ public class NpcPlayer implements Player{
       }
       // Reset the bet
       npc.getBetObject().resetBet();
-      // Make a bet, accordingly to credits
-      npc.getBetObject().setBet(strategicallyMakeBet());
+
+
     }
   }
 

@@ -146,7 +146,6 @@ public class Roulette implements Subject {
     else {
       npcWon = false;
     }
-
     // Time to notify observers about the changes
     notifyObservers();
   }

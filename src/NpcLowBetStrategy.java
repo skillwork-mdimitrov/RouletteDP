@@ -2,7 +2,7 @@ public class NpcLowBetStrategy implements NpcBetStrategy {
   private int betAmount;
 
   NpcLowBetStrategy() {
-    setBetAmount(1000);
+    setBetAmount(250);
   }
 
   // Set bet amount
