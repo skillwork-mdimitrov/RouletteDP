@@ -25,7 +25,7 @@ public class RouletteGUI implements ActionListener, Observer{
 
     // ~~~ Labels ~~~
     rouletteLabel = new JLabel();
-    rouletteLabel.setText("Roulette");
+    rouletteLabel.setText("Spin the roulette!");
     rouletteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
     yourAmountLbl = new JLabel();
@@ -51,15 +51,19 @@ public class RouletteGUI implements ActionListener, Observer{
 
   private void makeFrame() {
     frame = new JFrame("Roulette - the game");
+
+    // set the initial frame size
+    frame.setSize(1100, 300);
+
+    // center the frame and make it visible
+    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+    frame.setLocation(d.width/2 - frame.getWidth()/2, d.height/2 - frame.getHeight()/2);
+    frame.setVisible(true);
+
     Container contentPane = frame.getContentPane();
 
-    // set the layout
     // Border layout for container
-    BorderLayout containerLayout = new BorderLayout();
-
-    //FlowLayout rouletteLayout = new FlowLayout();
-    contentPane.setLayout(containerLayout);
-    //contentPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+    contentPane.setLayout(new BorderLayout());
 
     // cosmetic section
     contentPane.setBackground(Color.LIGHT_GRAY);
@@ -68,16 +72,10 @@ public class RouletteGUI implements ActionListener, Observer{
     contentPane.add(rouletteLabel, BorderLayout.PAGE_START);
 
     // Number buttons
-    JPanel buttonsPanel = new JPanel();
-    // TODO Make this number dynamic?
-    GridLayout buttonGrid = new GridLayout(3, 12);
-    buttonsPanel.setLayout(buttonGrid);
+    makeButtonGrid(contentPane);
 
-    for(Button element : roulette.getButtonsList()) {
-      buttonsPanel.add((JButton)element);
-    }
+    // TODO Make rows and columns dynamic?
 
-    contentPane.add(buttonsPanel, BorderLayout.CENTER);
 
     // TODO Numnber buttons
     // TODO Amount + bet
@@ -105,13 +103,7 @@ public class RouletteGUI implements ActionListener, Observer{
 //      contentPane.add(createButton(numberBtn, element.getNumber() + ""));
 //    }
 
-    // set the initial frame size
-    frame.setSize(1100, 150);
 
-    // center the frame and make it visible
-    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-    frame.setLocation(d.width/2 - frame.getWidth()/2, d.height/2 - frame.getHeight()/2);
-    frame.setVisible(true);
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,5 +145,43 @@ public class RouletteGUI implements ActionListener, Observer{
     if(obj instanceof Bet) {
       betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
     }
+  }
+
+  private void makeButtonGrid(Container contentPane)
+  {
+    JPanel buttonsPanel = new JPanel(new GridBagLayout());
+    GridBagConstraints c = new GridBagConstraints();
+    c.insets = new Insets(5, 5, 5, 5);
+    c.weightx = 0.5;
+    c.ipady = 30;
+
+    int x = 0;
+    int y = 0;
+    for(Button element : roulette.getButtonsList()) {
+      if (element.getNumber() == 0)
+      {
+        c.gridheight = 3;
+        c.fill = GridBagConstraints.VERTICAL;
+      }
+      else
+      {
+        c.gridheight = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+      }
+
+      c.gridx = x;
+      c.gridy = y;
+
+      buttonsPanel.add((JButton)element, c);
+
+      x++;
+      if (element.getNumber() % 12 == 0 && element.getNumber() > 1)
+      {
+        x = 1;
+        y++;
+      }
+    }
+
+    contentPane.add(buttonsPanel, BorderLayout.CENTER);
   }
 }
