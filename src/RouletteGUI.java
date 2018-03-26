@@ -1,3 +1,5 @@
+import com.sun.org.apache.xml.internal.security.utils.JDKXPathAPI;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -27,6 +29,8 @@ public class RouletteGUI implements ActionListener, Observer{
     rouletteLabel = new JLabel();
     rouletteLabel.setText("Spin the roulette!");
     rouletteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    rouletteLabel.setFont(new Font("Helvetica", Font.BOLD, 25));
+    rouletteLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
     yourAmountLbl = new JLabel();
     yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
@@ -42,9 +46,14 @@ public class RouletteGUI implements ActionListener, Observer{
 
     // ~~~ Buttons ~~
     increaseBetBtn = new JButton("+");
+    increaseBetBtn.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
     decreaseBetBtn = new JButton("-");
+    decreaseBetBtn.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
     lockNumberBtn = new JButton("Lock");
     spinRouletteBtn = new JButton("Spin roulette!");
+    spinRouletteBtn.setFont(new Font("Helvetica", Font.BOLD, 18));
+    spinRouletteBtn.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+
 
     makeFrame(); // don't move upwards
   }
@@ -53,7 +62,7 @@ public class RouletteGUI implements ActionListener, Observer{
     frame = new JFrame("Roulette - the game");
 
     // set the initial frame size
-    frame.setSize(1100, 300);
+    frame.setSize(1100, 600);
 
     // center the frame and make it visible
     Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -71,39 +80,14 @@ public class RouletteGUI implements ActionListener, Observer{
     // Spin the roulette title
     contentPane.add(rouletteLabel, BorderLayout.PAGE_START);
 
-    // Number buttons
-    makeButtonGrid(contentPane);
+    // Center (number buttons and amounts/bets)
+    JPanel centerPanel = new JPanel(new BorderLayout());
+    makeButtonGrid(centerPanel);
+    makeAmountAndBet(centerPanel);
+    contentPane.add(centerPanel, BorderLayout.CENTER);
 
-    // TODO Make rows and columns dynamic?
-
-
-    // TODO Numnber buttons
-    // TODO Amount + bet
-    // TODO Spint it button
-
-//    // add labels to the content panel
-//    contentPane.add(rouletteLabel, contentPane); // mby redundant
-//    contentPane.add(yourAmountLbl, contentPane);
-//    contentPane.add(npcAmountLbl, contentPane);
-//    contentPane.add(betAmountLbl, contentPane);
-//    contentPane.add(selecteNumberLbl, contentPane);
-//
-//    // Buttons
-//    contentPane.add(increaseBetBtn);
-//    contentPane.add(decreaseBetBtn);
-//    contentPane.add(lockNumberBtn);
-//    contentPane.add(spinRouletteBtn);
-//    increaseBetBtn.addActionListener(this);
-//    decreaseBetBtn.addActionListener(this);
-//    lockNumberBtn.addActionListener(this);
-//    spinRouletteBtn.addActionListener(this);
-//
-//    // The 37 buttons you can pick the number you want from
-//    for(Button element : roulette.getButtonsList()) {
-//      contentPane.add(createButton(numberBtn, element.getNumber() + ""));
-//    }
-
-
+    // Spin it button
+    contentPane.add(spinRouletteBtn, BorderLayout.PAGE_END);
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,7 +131,11 @@ public class RouletteGUI implements ActionListener, Observer{
     }
   }
 
-  private void makeButtonGrid(Container contentPane)
+  /***
+   * Creates the grid with the number buttons
+   * @param panel The total container to store the grid in
+   */
+  private void makeButtonGrid(JPanel panel)
   {
     JPanel buttonsPanel = new JPanel(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
@@ -155,6 +143,7 @@ public class RouletteGUI implements ActionListener, Observer{
     c.weightx = 0.5;
     c.ipady = 30;
 
+    // TODO Make rows and columns dynamic?
     int x = 0;
     int y = 0;
     for(Button element : roulette.getButtonsList()) {
@@ -182,6 +171,38 @@ public class RouletteGUI implements ActionListener, Observer{
       }
     }
 
-    contentPane.add(buttonsPanel, BorderLayout.CENTER);
+    panel.add(buttonsPanel, BorderLayout.PAGE_START);
+  }
+
+  /***
+   * Creates the amount and bet section (for the player and the NPC)
+   * @param panel The total container to store the section in
+   */
+  private void makeAmountAndBet(JPanel panel)
+  {
+    JPanel amountAndBetPanel = new JPanel(new BorderLayout());
+    amountAndBetPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 50));
+
+    JPanel yourAmountAndBet = new JPanel(new BorderLayout());
+    JPanel npcAmountAndBet = new JPanel(new BorderLayout());
+
+    // Your amount and bet
+    yourAmountAndBet.add(yourAmountLbl, BorderLayout.PAGE_START);
+    JPanel yourBetPanel = new JPanel(new BorderLayout());
+    yourBetPanel.add(increaseBetBtn, BorderLayout.LINE_START);
+    JLabel yourBetLabel = new JLabel("Your bet");
+    yourBetLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    yourBetPanel.add(yourBetLabel, BorderLayout.CENTER);
+    yourBetPanel.add(decreaseBetBtn, BorderLayout.LINE_END);
+    yourAmountAndBet.add(yourBetPanel, BorderLayout.PAGE_END);
+
+    // NPC amount and bet
+    npcAmountAndBet.add(npcAmountLbl, BorderLayout.PAGE_START);
+    npcAmountAndBet.add(new JLabel("A very nice bet"), BorderLayout.PAGE_END);
+
+    amountAndBetPanel.add(yourAmountAndBet, BorderLayout.LINE_START);
+    amountAndBetPanel.add(npcAmountAndBet, BorderLayout.LINE_END);
+
+    panel.add(amountAndBetPanel, BorderLayout.PAGE_END);
   }
 }
