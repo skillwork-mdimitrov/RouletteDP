@@ -4,13 +4,19 @@ Problems/Missing
 
  */
 
-public class RedButton implements Button {
-  private final String colour = "red"; // won't change
+import javax.swing.*;
+import java.awt.*;
+
+public class RedButton extends JButton implements Button {
+  private final Color color = Color.RED; // won't change
   private int number;
 
   // Constructor
-  RedButton(int number) {
+  RedButton(int number)
+  {
+    setText(Integer.toString(number));
     setNumber(number);
+    setBackground(color);
   }
 
   @Override
@@ -27,8 +33,8 @@ public class RedButton implements Button {
   /// GETTERS
   @Override
   // Get the colour of the button
-  public String getColour() {
-    return this.colour;
+  public Color getColour() {
+    return this.color;
   }
   // Get the number of the button
   @Override

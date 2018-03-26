@@ -26,6 +26,7 @@ public class RouletteGUI implements ActionListener, Observer{
     // ~~~ Labels ~~~
     rouletteLabel = new JLabel();
     rouletteLabel.setText("Roulette");
+    rouletteLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
     yourAmountLbl = new JLabel();
     yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
@@ -44,7 +45,6 @@ public class RouletteGUI implements ActionListener, Observer{
     decreaseBetBtn = new JButton("-");
     lockNumberBtn = new JButton("Lock");
     spinRouletteBtn = new JButton("Spin roulette!");
-    numberBtn = new JButton();
 
     makeFrame(); // don't move upwards
   }
@@ -54,34 +54,56 @@ public class RouletteGUI implements ActionListener, Observer{
     Container contentPane = frame.getContentPane();
 
     // set the layout
-    FlowLayout rouletteLayout = new FlowLayout();
-    contentPane.setLayout(rouletteLayout);
-    contentPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+    // Border layout for container
+    BorderLayout containerLayout = new BorderLayout();
+
+    //FlowLayout rouletteLayout = new FlowLayout();
+    contentPane.setLayout(containerLayout);
+    //contentPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
     // cosmetic section
     contentPane.setBackground(Color.LIGHT_GRAY);
 
-    // add labels to the content panel
-    contentPane.add(rouletteLabel, contentPane); // mby redundant
-    contentPane.add(yourAmountLbl, contentPane);
-    contentPane.add(npcAmountLbl, contentPane);
-    contentPane.add(betAmountLbl, contentPane);
-    contentPane.add(selecteNumberLbl, contentPane);
+    // Spin the roulette title
+    contentPane.add(rouletteLabel, BorderLayout.PAGE_START);
 
-    // Buttons
-    contentPane.add(increaseBetBtn);
-    contentPane.add(decreaseBetBtn);
-    contentPane.add(lockNumberBtn);
-    contentPane.add(spinRouletteBtn);
-    increaseBetBtn.addActionListener(this);
-    decreaseBetBtn.addActionListener(this);
-    lockNumberBtn.addActionListener(this);
-    spinRouletteBtn.addActionListener(this);
+    // Number buttons
+    JPanel buttonsPanel = new JPanel();
+    // TODO Make this number dynamic?
+    GridLayout buttonGrid = new GridLayout(3, 12);
+    buttonsPanel.setLayout(buttonGrid);
 
-    // The 37 buttons you can pick the number you want from
     for(Button element : roulette.getButtonsList()) {
-      contentPane.add(createButton(numberBtn, element.getNumber() + ""));
+      buttonsPanel.add((JButton)element);
     }
+
+    contentPane.add(buttonsPanel, BorderLayout.CENTER);
+
+    // TODO Numnber buttons
+    // TODO Amount + bet
+    // TODO Spint it button
+
+//    // add labels to the content panel
+//    contentPane.add(rouletteLabel, contentPane); // mby redundant
+//    contentPane.add(yourAmountLbl, contentPane);
+//    contentPane.add(npcAmountLbl, contentPane);
+//    contentPane.add(betAmountLbl, contentPane);
+//    contentPane.add(selecteNumberLbl, contentPane);
+//
+//    // Buttons
+//    contentPane.add(increaseBetBtn);
+//    contentPane.add(decreaseBetBtn);
+//    contentPane.add(lockNumberBtn);
+//    contentPane.add(spinRouletteBtn);
+//    increaseBetBtn.addActionListener(this);
+//    decreaseBetBtn.addActionListener(this);
+//    lockNumberBtn.addActionListener(this);
+//    spinRouletteBtn.addActionListener(this);
+//
+//    // The 37 buttons you can pick the number you want from
+//    for(Button element : roulette.getButtonsList()) {
+//      contentPane.add(createButton(numberBtn, element.getNumber() + ""));
+//    }
 
     // set the initial frame size
     frame.setSize(1100, 150);
@@ -90,13 +112,6 @@ public class RouletteGUI implements ActionListener, Observer{
     Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setLocation(d.width/2 - frame.getWidth()/2, d.height/2 - frame.getHeight()/2);
     frame.setVisible(true);
-  }
-
-  // Create buttons with their action listeners
-  private JButton createButton(JButton btn, String text) {
-    numberBtn = new JButton(text);
-    numberBtn.addActionListener(this);
-    return numberBtn;
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
