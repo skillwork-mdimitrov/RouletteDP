@@ -9,7 +9,7 @@ public class SpinRouletteState implements GameState {
     @Override
     public void placeBet(Roulette roulette) {
         roulette.setState(new PlaceBetState());
-        JOptionPane.showMessageDialog(null, "Back to Select Number State!");
+        JOptionPane.showMessageDialog(null, "Back to Place Bet State!");
     }
 
     @Override
