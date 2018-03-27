@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -127,27 +129,16 @@ public class Roulette implements Subject {
       else {
         buttonsList[i] = ButtonFactory.createButton("red", i);
       }
+
+      buttonsList[i].addListener(new NumberButtonActionListener());
     }
   }
 
   // Play the game
   public void spinRoulette() {
-    // Player
-    if(getSelectedNumber() == getWinningNumber()) {
-      youWon = true;
-    }
-    else {
-      youWon = false;
-    }
 
-    // NPC
-    if(getNpcSelectedNumber() == getWinningNumber()) {
-      npcWon = true;
-    }
-    else {
-      npcWon = false;
-    }
-    // Time to notify observers about the changes
+    youWon = getSelectedNumber() == getWinningNumber();
+    npcWon = getNpcSelectedNumber() == getWinningNumber();
     notifyObservers();
   }
 
@@ -175,5 +166,20 @@ public class Roulette implements Subject {
       Observer observer = it.next();
       observer.update(this);
     }
+  }
+}
+
+class NumberButtonActionListener implements ActionListener
+{
+  @Override
+  public void actionPerformed(ActionEvent e)
+  {
+    Button buttonPressed = (Button)e.getSource();
+
+    JOptionPane.showMessageDialog(null, "Clicked " + buttonPressed.getNumber() + "!");
+
+//    JFrame newFrame = new JFrame();
+//    newFrame.setSize(100, 100);
+//    newFrame.setVisible(true);
   }
 }

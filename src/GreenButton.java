@@ -6,6 +6,7 @@ Problems/Missing
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class GreenButton extends JButton implements Button {
   private final Color color = Color.GREEN; // won't change
@@ -25,11 +26,6 @@ public class GreenButton extends JButton implements Button {
     this.number = number;
   }
 
-  @Override
-  public void addActionListener() {
-
-  }
-
   /// GETTERS
   @Override
   // Get the colour of the button
@@ -41,5 +37,11 @@ public class GreenButton extends JButton implements Button {
   public int getNumber() {
     return this.number;
   }
+
+  @Override
+  public void addListener(ActionListener al) {
+    this.addActionListener(al);
+  }
+
 
 }

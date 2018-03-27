@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public interface Button{
   // Number is referring to physical number of the button (1-36)
@@ -10,5 +11,5 @@ public interface Button{
   public Color getColour();
   public int getNumber();
 
-  public void addActionListener();
+  public void addListener(ActionListener al);
 }
