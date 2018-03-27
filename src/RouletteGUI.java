@@ -1,5 +1,3 @@
-import com.sun.org.apache.xml.internal.security.utils.JDKXPathAPI;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -7,16 +5,17 @@ import javax.swing.*;
 public class RouletteGUI implements ActionListener, Observer{
   private Roulette roulette;
   private JFrame frame;
+
   // ~~ Labels
   private JLabel rouletteLabel;
   private JLabel yourAmountLbl;
   private JLabel npcAmountLbl;
   private JLabel betAmountLbl;
-  private JLabel selecteNumberLbl;
+  private JLabel selectNumberLbl;
+
   // ~~~ Buttons ~~~
   private JButton increaseBetBtn;
   private JButton decreaseBetBtn;
-  private JButton numberBtn;
   private JButton lockNumberBtn;
   private JButton spinRouletteBtn;
 
@@ -41,19 +40,44 @@ public class RouletteGUI implements ActionListener, Observer{
     betAmountLbl = new JLabel();
     betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
 
-    selecteNumberLbl = new JLabel();
-    selecteNumberLbl.setText("|| Choose a number ||");
+    selectNumberLbl = new JLabel();
+    selectNumberLbl.setText("|| Choose a number ||");
 
     // ~~~ Buttons ~~
     increaseBetBtn = new JButton("+");
     increaseBetBtn.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
+    // TODO Implement increase logic
+    increaseBetBtn.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        roulette.placeBet();
+      }
+    });
+
     decreaseBetBtn = new JButton("-");
     decreaseBetBtn.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
+    // TODO Implement decrease logic
+    decreaseBetBtn.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        roulette.placeBet();
+      }
+    });
+
     lockNumberBtn = new JButton("Lock");
     spinRouletteBtn = new JButton("Spin roulette!");
     spinRouletteBtn.setFont(new Font("Helvetica", Font.BOLD, 18));
     spinRouletteBtn.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+    // TODO Implement spin roulette logic
+    spinRouletteBtn.addActionListener(new ActionListener() {
 
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        roulette.spinRoulette();
+      }
+    });
 
     makeFrame(); // don't move upwards
   }
@@ -115,7 +139,7 @@ public class RouletteGUI implements ActionListener, Observer{
     if(!roulette.isNumberLocked()) {
       try {
         roulette.setSelectedNumber(Integer.parseInt(e.getActionCommand()));
-        selecteNumberLbl.setText("Your number: " + roulette.getSelectedNumber() + "");
+        selectNumberLbl.setText("Your number: " + roulette.getSelectedNumber() + "");
       } catch (Exception ex) { }
     }
   }

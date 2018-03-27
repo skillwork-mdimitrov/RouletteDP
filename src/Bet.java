@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Bet implements Subject {
+  private int betNumber = 0;
   private int bet = 0; // initially 0
   private boolean confirmedBet = false;
   private List<Observer> observers;
@@ -28,6 +29,9 @@ public class Bet implements Subject {
       notifyObservers();
     }
   }
+
+  public int getBetNumber(){return betNumber;}
+  public void setBetNumber(int newBetNumber){betNumber = newBetNumber;}
 
   public void setBet(int bet) {
     this.bet = bet;

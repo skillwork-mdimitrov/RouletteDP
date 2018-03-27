@@ -5,14 +5,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Roulette implements Subject {
+public class Roulette implements Subject, ActionListener {
 
   // ~~~ BUTTONS ~~~
   private Button[] buttonsList;
   private final int buttonLimit = 37; // including the 0
+
   // ~~~ USERS ~~~
   private User user;
   private NpcPlayer npc;
+
+  // ~~~ States ~~~
+  private GameState currentState;
+
   // ~~~ ROULETTE ~~~
   private int winningNumber = 20; // hardcoded, needs to be random
   private int selectedNumber; // Player's number
@@ -22,8 +27,11 @@ public class Roulette implements Subject {
   private boolean numberLocked = false;
   private RouletteGUI rouletteGUI;
   private List<Observer> observers;
+
   // ~~~ TESTING
   private boolean testing = false;
+
+
 
   Roulette() {
     buttonsList = new Button[buttonLimit]; // Instantiate array, set the size of the button list
@@ -36,6 +44,9 @@ public class Roulette implements Subject {
     // Register observers
     register(user); // let the user observe
     register(npc); // let the npc observe
+
+    // Set state
+    currentState = new SelectNumberState();
 
     // Testing
     if(testing) {
@@ -130,16 +141,8 @@ public class Roulette implements Subject {
         buttonsList[i] = ButtonFactory.createButton("red", i);
       }
 
-      buttonsList[i].addListener(new NumberButtonActionListener());
+      buttonsList[i].addListener(this);
     }
-  }
-
-  // Play the game
-  public void spinRoulette() {
-
-    youWon = getSelectedNumber() == getWinningNumber();
-    npcWon = getNpcSelectedNumber() == getWinningNumber();
-    notifyObservers();
   }
 
   @Override
@@ -167,19 +170,31 @@ public class Roulette implements Subject {
       observer.update(this);
     }
   }
-}
 
-class NumberButtonActionListener implements ActionListener
-{
   @Override
-  public void actionPerformed(ActionEvent e)
-  {
+  public void actionPerformed(ActionEvent e) {
     Button buttonPressed = (Button)e.getSource();
-
-    JOptionPane.showMessageDialog(null, "Clicked " + buttonPressed.getNumber() + "!");
-
-//    JFrame newFrame = new JFrame();
-//    newFrame.setSize(100, 100);
-//    newFrame.setVisible(true);
+    this.selectNumber(buttonPressed.getNumber());
   }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATE HANDLERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  public void setState(GameState newState){
+    currentState = newState;
+  }
+  public void selectNumber(int number){
+    user.setBetNumber(number);
+    currentState.selectNumber(this);
+  }
+  public void placeBet(){
+    currentState.placeBet(this);
+  }
+  public void spinRoulette(){
+    youWon = getSelectedNumber() == getWinningNumber();
+    npcWon = getNpcSelectedNumber() == getWinningNumber();
+    notifyObservers();
+
+    currentState.spinRoulette(this);
+  }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
