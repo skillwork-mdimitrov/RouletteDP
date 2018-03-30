@@ -51,6 +51,11 @@ public class NpcPlayer implements Player{
     }
   }
 
+  @Override
+  public void setBetNumber(int newBetNumber) {
+    bet.setBetNumber(newBetNumber);
+  }
+
   private int strategicallyMakeBet() {
     int theBet = 500; // default bet
     // NPC is playing it safe

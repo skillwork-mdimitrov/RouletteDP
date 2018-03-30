@@ -47,4 +47,9 @@ public class User implements Player{
     }
   }
 
+  @Override
+  public void setBetNumber(int newBetNumber) {
+    bet.setBetNumber(newBetNumber);
+  }
+
 }

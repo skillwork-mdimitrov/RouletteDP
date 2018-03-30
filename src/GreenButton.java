@@ -4,13 +4,20 @@ Problems/Missing
 
  */
 
-public class GreenButton implements Button {
-  private final String colour = "green"; // won't change
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+
+public class GreenButton extends JButton implements Button {
+  private final Color color = Color.GREEN; // won't change
   private int number;
 
   // Constructor
-  GreenButton(int number) {
+  GreenButton(int number)
+  {
+    setText(Integer.toString(number));
     setNumber(number);
+    setBackground(color);
   }
 
   @Override
@@ -19,21 +26,22 @@ public class GreenButton implements Button {
     this.number = number;
   }
 
-  @Override
-  public void addActionListener() {
-
-  }
-
   /// GETTERS
   @Override
   // Get the colour of the button
-  public String getColour() {
-    return this.colour;
+  public Color getColour() {
+    return this.color;
   }
   // Get the number of the button
   @Override
   public int getNumber() {
     return this.number;
   }
+
+  @Override
+  public void addListener(ActionListener al) {
+    this.addActionListener(al);
+  }
+
 
 }
