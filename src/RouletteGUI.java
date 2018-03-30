@@ -96,7 +96,6 @@ public class RouletteGUI implements Observer{
     // center the frame and make it visible
     Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setLocation(d.width/2 - frame.getWidth()/2, d.height/2 - frame.getHeight()/2);
-    frame.setVisible(true);
 
     Container contentPane = frame.getContentPane();
 
@@ -117,6 +116,8 @@ public class RouletteGUI implements Observer{
 
     // Spin it button
     contentPane.add(spinRouletteBtn, BorderLayout.PAGE_END);
+
+    frame.setVisible(true);
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
