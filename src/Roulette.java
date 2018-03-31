@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class Roulette implements Subject, ActionListener {
 
@@ -20,7 +21,7 @@ public class Roulette implements Subject, ActionListener {
 
   // ~~~ ROULETTE ~~~
   private boolean isSpinning = false;
-  private int winningNumber = 20; // hardcoded, needs to be random
+  private int winningNumber = -1; // hardcoded, needs to be random
   private boolean youWon = false;
   private boolean npcWon = false;
   private List<Observer> observers;
@@ -69,8 +70,9 @@ public class Roulette implements Subject, ActionListener {
   }
 
   /* Set winning number */
-  public void setWinningNumber(int winningNumber) {
-    this.winningNumber = winningNumber;
+  public void generateRandomNumber() {
+    Random random = new Random();
+    winningNumber = random.nextInt(buttonLimit);
   }
 
 
@@ -180,9 +182,6 @@ public class Roulette implements Subject, ActionListener {
    */
   public void selectNumber(int number){
     user.setBetNumber(number);
-
-    // Randomly let the opponent bet here
-
     currentState.selectNumber(this);
 
     // Notify the observers
@@ -203,6 +202,7 @@ public class Roulette implements Subject, ActionListener {
    * After this, go back to the SelectNumber state again
    */
   public void spinRoulette(){
+    generateRandomNumber();
     youWon = user.getBetObject().getBetNumber() == getWinningNumber();
     npcWon = npc.getBetObject().getBetNumber() == getWinningNumber();
     isSpinning = true;

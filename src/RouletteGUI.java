@@ -13,6 +13,7 @@ public class RouletteGUI implements Observer{
   private JLabel npcAmountLbl;
   private JLabel betAmountLbl;
   private JLabel selectNumberLbl;
+  private JLabel lastWinningNumberLbl;
 
   // ~~~ Buttons ~~~
   private JButton increaseBetBtn;
@@ -26,23 +27,18 @@ public class RouletteGUI implements Observer{
     //roulette.getUser().getBetObject().register(this);
 
     // ~~~ Labels ~~~
-    rouletteLabel = new JLabel();
-    rouletteLabel.setText("Spin the roulette!");
+    rouletteLabel = new JLabel("Spin the roulette!");
     rouletteLabel.setHorizontalAlignment(SwingConstants.CENTER);
     rouletteLabel.setFont(new Font("Helvetica", Font.BOLD, 25));
     rouletteLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-    yourAmountLbl = new JLabel();
-    yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
-
-    npcAmountLbl = new JLabel();
-    npcAmountLbl.setText("|| NPC amount: " + roulette.getNpc().getPlayerCredits() + "||");
-
-    betAmountLbl = new JLabel();
-    betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
-
-    selectNumberLbl = new JLabel();
-    selectNumberLbl.setText("|| Your selected number: Unknown ||");
+    yourAmountLbl = new JLabel("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
+    npcAmountLbl = new JLabel("|| NPC amount: " + roulette.getNpc().getPlayerCredits() + "||");
+    betAmountLbl = new JLabel("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
+    selectNumberLbl = new JLabel("|| Your selected number: Unknown ||");
+    lastWinningNumberLbl = new JLabel("Last winning number: -");
+    lastWinningNumberLbl.setHorizontalAlignment(SwingConstants.CENTER);
+    lastWinningNumberLbl.setFont(new Font("Helvetica", Font.BOLD, 18));
 
     // ~~~ Buttons ~~
     increaseBetBtn = new JButton("+");
@@ -139,6 +135,12 @@ public class RouletteGUI implements Observer{
     yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
     betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
     npcAmountLbl.setText("|| Npc amount: " + roulette.getNpc().getPlayerCredits() + "||");
+
+    if (roulette.getWinningNumber() >= 0)
+    {
+      lastWinningNumberLbl.setText("Last winning number: " + roulette.getWinningNumber());
+    }
+
 
     // SelectNumberState specific GUI updates
     if (roulette.getState() instanceof  SelectNumberState)
@@ -248,6 +250,7 @@ public class RouletteGUI implements Observer{
     npcAmountAndBet.add(new JLabel("A very nice bet"), BorderLayout.PAGE_END);
 
     amountAndBetPanel.add(yourSelectedNumberAmountAndBet, BorderLayout.LINE_START);
+    amountAndBetPanel.add(lastWinningNumberLbl, BorderLayout.CENTER);
     amountAndBetPanel.add(npcAmountAndBet, BorderLayout.LINE_END);
 
     panel.add(amountAndBetPanel, BorderLayout.PAGE_END);
