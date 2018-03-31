@@ -20,11 +20,11 @@ public class RouletteGUI implements Observer{
   private JButton decreaseBetBtn;
   private JButton lockNumberBtn;
   private JButton spinRouletteBtn;
+  private JButton playAgainButton;
 
   RouletteGUI() {
     roulette = new Roulette();
     roulette.register(this);
-    //roulette.getUser().getBetObject().register(this);
 
     // ~~~ Labels ~~~
     rouletteLabel = new JLabel("Spin the roulette!");
@@ -71,7 +71,6 @@ public class RouletteGUI implements Observer{
     spinRouletteBtn = new JButton("Spin roulette!");
     spinRouletteBtn.setFont(new Font("Helvetica", Font.BOLD, 18));
     spinRouletteBtn.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-    // TODO Implement spin roulette logic
     spinRouletteBtn.addActionListener(new ActionListener() {
 
       @Override
@@ -79,6 +78,10 @@ public class RouletteGUI implements Observer{
         roulette.spinRoulette();
       }
     });
+
+    playAgainButton = new JButton("Play Again");
+    playAgainButton.setFont(new Font("Helvetica", Font.BOLD, 18));
+    // TODO Restart game logic
 
     // Disable all buttons at first
     increaseBetBtn.setEnabled(false);
@@ -175,13 +178,13 @@ public class RouletteGUI implements Observer{
     // You Win screen
     if (roulette.getState() instanceof YouWinState)
     {
-      paintYouWin();
+      paintResultScreen("You win!");
     }
 
     // Game Over screen
     if (roulette.getState() instanceof GameOverState)
     {
-      paintGameOver();
+      paintResultScreen("Game Over");
     }
   }
 
@@ -269,26 +272,24 @@ public class RouletteGUI implements Observer{
 
 
   /***
-   * Paint the 'You Win' screen
+   * Paint the 'You Win' or 'Game Over' screen
    */
-  private void paintYouWin()
+  private void paintResultScreen(String result)
   {
+    // Using a GridBagLayout to center the elements in the screen (only GridBagLayout does that)
     Container container = frame.getContentPane();
     container.removeAll();
+    container.setLayout(new GridBagLayout());
+    GridBagConstraints c = new GridBagConstraints();
+    c.insets = new Insets(10, 10, 10, 10);
 
+    JLabel youLoseLabel = new JLabel(result);
+    youLoseLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    youLoseLabel.setFont(new Font("Helvetica", Font.BOLD, 40));
 
-    container.repaint();
-  }
-
-  /***
-   * Paint the 'Game Over' screen
-   */
-  private void paintGameOver()
-  {
-    Container container = frame.getContentPane();
-    container.removeAll();
-
-    // TODO Add GameOver screen here
+    container.add(youLoseLabel, c);
+    c.gridy = 1;
+    container.add(playAgainButton, c);
 
     container.repaint();
   }
