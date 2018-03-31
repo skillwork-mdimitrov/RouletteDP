@@ -1,5 +1,3 @@
-// Who handles if bet goes below 0?
-
 public class Bet{
   private int betNumber = 0;
   private int bet = 0; // initially 0
@@ -8,13 +6,15 @@ public class Bet{
   /// Manipulate Bet
   public void increaseBet() {
     // Possibly add if confirmed bet = false check
+
+    // Check if bet is lower than actual amount???
     if(!isConfirmedBet()) {
       bet += 500;
     }
   }
   public void decreaseBet() {
     // Possibly add if confirmed bet = false check
-    if(!isConfirmedBet()) {
+    if(!isConfirmedBet() && bet > 0) {
       bet -= 500;
     }
   }

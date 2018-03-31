@@ -174,6 +174,10 @@ public class Roulette implements Subject, ActionListener {
     currentState = newState;
   }
 
+  /***
+   * Select a number to bet on and go to the 'PlaceBet' state
+   * @param number The number to place a bet on
+   */
   public void selectNumber(int number){
     user.setBetNumber(number);
 
@@ -185,12 +189,19 @@ public class Roulette implements Subject, ActionListener {
     notifyObservers();
   }
 
+  /***
+   * Placed a bet and going to the spin state
+   */
   public void placeBet(){
 
     currentState.placeBet(this);
     notifyObservers();
   }
 
+  /***
+   * The final step towards glory: Spint the roulette!
+   * After this, go back to the SelectNumber state again
+   */
   public void spinRoulette(){
     youWon = user.getBetObject().getBetNumber() == getWinningNumber();
     npcWon = npc.getBetObject().getBetNumber() == getWinningNumber();
