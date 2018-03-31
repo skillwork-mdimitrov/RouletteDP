@@ -6,7 +6,6 @@ public class SelectNumberState implements GameState
     @Override
     public void selectNumber(Roulette roulette) {
         roulette.setState(new PlaceBetState());
-        JOptionPane.showMessageDialog(null, "Entered bet state!");
     }
 
     @Override

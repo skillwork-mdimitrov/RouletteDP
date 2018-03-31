@@ -67,7 +67,6 @@ public class RouletteGUI implements Observer{
     lockNumberBtn.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        roulette.setNumberLocked(true);
         roulette.getUser().getBetObject().confirmBet();
         roulette.placeBet();
       }
@@ -136,8 +135,7 @@ public class RouletteGUI implements Observer{
   @Override
   public void update(Object obj) {
 
-    // Update all the labels ALWAYS
-    selectNumberLbl.setText("|| Your selected number: " + roulette.getUser().getBetObject().getBetNumber() + "||");
+    // Update these labels ALWAYS
     yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
     betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
     npcAmountLbl.setText("|| Npc amount: " + roulette.getNpc().getPlayerCredits() + "||");
@@ -145,6 +143,7 @@ public class RouletteGUI implements Observer{
     // SelectNumberState specific GUI updates
     if (roulette.getState() instanceof  SelectNumberState)
     {
+      selectNumberLbl.setText("|| Your selected number: unknown ||");
       increaseBetBtn.setEnabled(false);
       decreaseBetBtn.setEnabled(false);
       lockNumberBtn.setEnabled(false);
@@ -153,6 +152,7 @@ public class RouletteGUI implements Observer{
     // PlaceBetState specific GUI updates
     if (roulette.getState() instanceof PlaceBetState)
     {
+      selectNumberLbl.setText("|| Your selected number: " + roulette.getUser().getBetObject().getBetNumber() + "||");
       increaseBetBtn.setEnabled(true);
       decreaseBetBtn.setEnabled(true);
       lockNumberBtn.setEnabled(true);
@@ -161,6 +161,7 @@ public class RouletteGUI implements Observer{
     // SpinRouletteState specific GUI updates
     if (roulette.getState() instanceof SpinRouletteState)
     {
+      selectNumberLbl.setText("|| Your selected number: " + roulette.getUser().getBetObject().getBetNumber() + "||");
       increaseBetBtn.setEnabled(false);
       decreaseBetBtn.setEnabled(false);
       lockNumberBtn.setEnabled(false);

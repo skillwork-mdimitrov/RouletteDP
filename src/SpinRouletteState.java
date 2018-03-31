@@ -15,6 +15,5 @@ public class SpinRouletteState implements GameState {
     @Override
     public void spinRoulette(Roulette roulette) {
         roulette.setState(new SelectNumberState());
-        JOptionPane.showMessageDialog(null, "Spin to win!");
     }
 }

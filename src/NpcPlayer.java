@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 public class NpcPlayer implements Player{
   private int playerCredits; // react to changes, observer
   private Bet bet;
@@ -37,15 +39,17 @@ public class NpcPlayer implements Player{
     Roulette rouletteObj = (Roulette)obj;
 
     // Check if you have won from that spin
-    if (rouletteObj.getState() instanceof SpinRouletteState) {
+    if (rouletteObj.getState() instanceof SpinRouletteState && rouletteObj.getIsSpinning()) {
 
       // Make a bet, accordingly to credits
       getBetObject().setBet(strategicallyMakeBet());
 
       if (((Roulette) obj).didNPCWon()) {
         increasePlayerCredits(getBetObject().getBet());
+        JOptionPane.showMessageDialog(null, "Uh oh... NPC won " + getBetObject().getBet() + "");
       } else {
         decreasePlayerCredits(getBetObject().getBet());
+        JOptionPane.showMessageDialog(null, "NPC lost " + getBetObject().getBet() );
       }
       // Reset the bet
       getBetObject().resetBet();

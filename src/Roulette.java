@@ -19,10 +19,10 @@ public class Roulette implements Subject, ActionListener {
   private GameState currentState;
 
   // ~~~ ROULETTE ~~~
+  private boolean isSpinning = false;
   private int winningNumber = 20; // hardcoded, needs to be random
   private boolean youWon = false;
   private boolean npcWon = false;
-  private boolean numberLocked = false;
   private List<Observer> observers;
 
   // ~~~ TESTING
@@ -73,10 +73,6 @@ public class Roulette implements Subject, ActionListener {
     this.winningNumber = winningNumber;
   }
 
-  /* Lock the selected number */
-  public void setNumberLocked(boolean numberLocked) {
-    this.numberLocked = numberLocked;
-  }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -89,6 +85,8 @@ public class Roulette implements Subject, ActionListener {
   public int getWinningNumber() {
     return winningNumber;
   }
+
+  public boolean getIsSpinning(){return isSpinning;}
 
   // Find if you win or not
   public boolean didYouWin() {
@@ -108,11 +106,6 @@ public class Roulette implements Subject, ActionListener {
   // Get NPC object
   public NpcPlayer getNpc() {
     return npc;
-  }
-
-  // Get selected number lock status
-  public boolean isNumberLocked() {
-    return numberLocked;
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -201,9 +194,12 @@ public class Roulette implements Subject, ActionListener {
   public void spinRoulette(){
     youWon = user.getBetObject().getBetNumber() == getWinningNumber();
     npcWon = npc.getBetObject().getBetNumber() == getWinningNumber();
+    isSpinning = true;
     notifyObservers();
 
+    // Return to SelectNumberState
     currentState.spinRoulette(this);
+    isSpinning = false;
     notifyObservers();
   }
 
