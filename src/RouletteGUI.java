@@ -81,7 +81,16 @@ public class RouletteGUI implements Observer{
 
     playAgainButton = new JButton("Play Again");
     playAgainButton.setFont(new Font("Helvetica", Font.BOLD, 18));
-    // TODO Restart game logic
+    playAgainButton.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        roulette.unregisterAll();
+        paintMainScreen();
+        roulette.restartGame();
+
+      }
+    });
 
     // Disable all buttons at first
     increaseBetBtn.setEnabled(false);
@@ -142,6 +151,9 @@ public class RouletteGUI implements Observer{
     if (roulette.getWinningNumber() >= 0)
     {
       lastWinningNumberLbl.setText("Last winning number: " + roulette.getWinningNumber());
+    }
+    else{
+      lastWinningNumberLbl.setText("Last winning number: -");
     }
 
 
@@ -292,5 +304,29 @@ public class RouletteGUI implements Observer{
     container.add(playAgainButton, c);
 
     container.repaint();
+  }
+
+  private void paintMainScreen()
+  {
+    Container container = frame.getContentPane();
+    container.removeAll();
+    container.setLayout(new BorderLayout());
+
+    // Spin the roulette title
+    container.add(rouletteLabel, BorderLayout.PAGE_START);
+
+    // Center (number buttons and amounts/bets)
+    JPanel centerPanel = new JPanel(new BorderLayout());
+    makeButtonGrid(centerPanel);
+    makeAmountAndBet(centerPanel);
+    container.add(centerPanel, BorderLayout.CENTER);
+
+    // Spin it button
+    container.add(spinRouletteBtn, BorderLayout.PAGE_END);
+
+    container.repaint();
+    frame.setVisible(true);
+
+    roulette.register(this);
   }
 }

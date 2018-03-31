@@ -36,7 +36,6 @@ public class Roulette implements Subject, ActionListener {
     makeButtons();
     user = new User(); // Create the user playing
     npc = new NpcPlayer(); // Create the NPC
-    // rouletteGUI = new RouletteGUI(); // Create the RouletteGUI (just to send notifications)
     observers = new ArrayList<Observer>();
 
     // Register observers
@@ -159,6 +158,11 @@ public class Roulette implements Subject, ActionListener {
     }
   }
 
+  public void unregisterAll()
+  {
+    observers = new ArrayList<Observer>();
+  }
+
   @Override
   public void notifyObservers() {
     Iterator<Observer> it = observers.iterator();
@@ -228,9 +232,10 @@ public class Roulette implements Subject, ActionListener {
     else{
       // Return to SelectNumberState
       currentState.spinRoulette(this);
-      isSpinning = false;
       notifyObservers();
     }
+
+    isSpinning = false;
   }
 
   /***
@@ -266,4 +271,19 @@ public class Roulette implements Subject, ActionListener {
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  public void restartGame()
+  {
+    user = new User(); // Create the user playing
+    npc = new NpcPlayer(); // Create the NPC
+
+    // Register observers
+    register(user); // let the user observe
+    register(npc); // let the npc observe
+
+    winningNumber = -1;
+
+    currentState.selectNumber(this);
+    notifyObservers();
+  }
 }
