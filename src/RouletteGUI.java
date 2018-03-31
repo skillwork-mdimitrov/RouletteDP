@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class RouletteGUI implements ActionListener, Observer{
+public class RouletteGUI implements Observer{
   private Roulette roulette;
   private JFrame frame;
 
@@ -46,27 +46,32 @@ public class RouletteGUI implements ActionListener, Observer{
     // ~~~ Buttons ~~
     increaseBetBtn = new JButton("+");
     increaseBetBtn.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
-    // TODO Implement increase logic
     increaseBetBtn.addActionListener(new ActionListener() {
-
       @Override
       public void actionPerformed(ActionEvent e) {
-        roulette.placeBet();
+        roulette.getUser().getBetObject().increaseBet();
       }
     });
 
     decreaseBetBtn = new JButton("-");
     decreaseBetBtn.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
-    // TODO Implement decrease logic
     decreaseBetBtn.addActionListener(new ActionListener() {
-
       @Override
       public void actionPerformed(ActionEvent e) {
-        roulette.placeBet();
+        roulette.getUser().getBetObject().decreaseBet();
       }
     });
 
     lockNumberBtn = new JButton("Lock");
+    lockNumberBtn.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        roulette.setNumberLocked(true);
+        roulette.getUser().getBetObject().confirmBet();
+        roulette.placeBet();
+      }
+    });
+
     spinRouletteBtn = new JButton("Spin roulette!");
     spinRouletteBtn.setFont(new Font("Helvetica", Font.BOLD, 18));
     spinRouletteBtn.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
@@ -91,7 +96,6 @@ public class RouletteGUI implements ActionListener, Observer{
     // center the frame and make it visible
     Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setLocation(d.width/2 - frame.getWidth()/2, d.height/2 - frame.getHeight()/2);
-    frame.setVisible(true);
 
     Container contentPane = frame.getContentPane();
 
@@ -112,6 +116,8 @@ public class RouletteGUI implements ActionListener, Observer{
 
     // Spin it button
     contentPane.add(spinRouletteBtn, BorderLayout.PAGE_END);
+
+    frame.setVisible(true);
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -121,28 +127,15 @@ public class RouletteGUI implements ActionListener, Observer{
     return roulette;
   }
 
-  public void actionPerformed(ActionEvent e) {
-    if(e.getSource() == increaseBetBtn) {
-      roulette.getUser().getBetObject().increaseBet();
-    }
-    if(e.getSource() == decreaseBetBtn) {
-      roulette.getUser().getBetObject().decreaseBet();
-    }
-    if(e.getSource() == lockNumberBtn) {
-      roulette.setNumberLocked(true);
-      roulette.getUser().getBetObject().confirmBet();
-    }
-    if(e.getSource() == spinRouletteBtn) {
-      roulette.spinRoulette();
-    }
-
-    if(!roulette.isNumberLocked()) {
-      try {
-        roulette.setSelectedNumber(Integer.parseInt(e.getActionCommand()));
-        selectNumberLbl.setText("Your number: " + roulette.getSelectedNumber() + "");
-      } catch (Exception ex) { }
-    }
-  }
+  // scrap this POTENTIALLY
+//  public void actionPerformed(ActionEvent e) {
+//    if(!roulette.isNumberLocked()) {
+//      try {
+//        roulette.setSelectedNumber(Integer.parseInt(e.getActionCommand()));
+//        selectNumberLbl.setText("Your number: " + roulette.getSelectedNumber() + "");
+//      } catch (Exception ex) { }
+//    }
+//  }
 
   @Override
   public void update(Object obj) {
@@ -214,10 +207,10 @@ public class RouletteGUI implements ActionListener, Observer{
     yourAmountAndBet.add(yourAmountLbl, BorderLayout.PAGE_START);
     JPanel yourBetPanel = new JPanel(new BorderLayout());
     yourBetPanel.add(increaseBetBtn, BorderLayout.LINE_START);
-    JLabel yourBetLabel = new JLabel("Your bet");
-    yourBetLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    yourBetPanel.add(yourBetLabel, BorderLayout.CENTER);
+    betAmountLbl.setHorizontalAlignment(SwingConstants.CENTER);
+    yourBetPanel.add(betAmountLbl, BorderLayout.CENTER);
     yourBetPanel.add(decreaseBetBtn, BorderLayout.LINE_END);
+    yourBetPanel.add(lockNumberBtn, BorderLayout.PAGE_END);
     yourAmountAndBet.add(yourBetPanel, BorderLayout.PAGE_END);
 
     // NPC amount and bet

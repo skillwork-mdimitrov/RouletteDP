@@ -20,8 +20,6 @@ public class Roulette implements Subject, ActionListener {
 
   // ~~~ ROULETTE ~~~
   private int winningNumber = 20; // hardcoded, needs to be random
-  private int selectedNumber; // Player's number
-  private int npcSelectedNumber; // NPC's number
   private boolean youWon = false;
   private boolean npcWon = false;
   private boolean numberLocked = false;
@@ -59,16 +57,6 @@ public class Roulette implements Subject, ActionListener {
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  /* Set player number */
-  public void setSelectedNumber(int selectedNumber) {
-    this.selectedNumber = selectedNumber;
-  }
-
-  /* Set NPC number */
-  public void setNpcSelectedNumber(int npcSelectedNumber) {
-    this.npcSelectedNumber = npcSelectedNumber;
-  }
-
   /* Set winning number */
   public void setWinningNumber(int winningNumber) {
     this.winningNumber = winningNumber;
@@ -84,16 +72,6 @@ public class Roulette implements Subject, ActionListener {
   /* Get buttons */
   public Button[] getButtonsList() {
     return buttonsList;
-  }
-
-  /* Get player number (the number he is betting on) */
-  public int getSelectedNumber() {
-    return selectedNumber;
-  }
-
-  /* Get the NPC number (what is he betting on) */
-  public int getNpcSelectedNumber() {
-    return npcSelectedNumber;
   }
 
   // Get the winning number
@@ -181,16 +159,20 @@ public class Roulette implements Subject, ActionListener {
   public void setState(GameState newState){
     currentState = newState;
   }
+
   public void selectNumber(int number){
     user.setBetNumber(number);
+    // Randomly let the opponent bet here
     currentState.selectNumber(this);
   }
+
   public void placeBet(){
     currentState.placeBet(this);
   }
+
   public void spinRoulette(){
-    youWon = getSelectedNumber() == getWinningNumber();
-    npcWon = getNpcSelectedNumber() == getWinningNumber();
+    youWon = user.getBetObject().getBetNumber() == getWinningNumber();
+    npcWon = npc.getBetObject().getBetNumber() == getWinningNumber();
     notifyObservers();
 
     currentState.spinRoulette(this);
