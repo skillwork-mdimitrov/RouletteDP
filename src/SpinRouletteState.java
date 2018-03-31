@@ -16,4 +16,14 @@ public class SpinRouletteState implements GameState {
     public void spinRoulette(Roulette roulette) {
         roulette.setState(new SelectNumberState());
     }
+
+    @Override
+    public void toGameOver(Roulette roulette) {
+        roulette.setState(new GameOverState());
+    }
+
+    @Override
+    public void toYouWin(Roulette roulette) {
+        roulette.setState(new YouWinState());
+    }
 }

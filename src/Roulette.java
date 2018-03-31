@@ -75,8 +75,10 @@ public class Roulette implements Subject, ActionListener {
     winningNumber = random.nextInt(buttonLimit);
   }
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   /* Get buttons */
   public Button[] getButtonsList() {
@@ -138,6 +140,8 @@ public class Roulette implements Subject, ActionListener {
     }
   }
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ OBSERVER PATTERN METHODS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
   @Override
   public void register(Observer observer) {
     if(observer != null) {
@@ -164,13 +168,16 @@ public class Roulette implements Subject, ActionListener {
     }
   }
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
   @Override
   public void actionPerformed(ActionEvent e) {
     Button buttonPressed = (Button)e.getSource();
     this.selectNumber(buttonPressed.getNumber());
   }
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATE HANDLERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATE HANDLERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
   public GameState getState(){ return currentState; }
   public void setState(GameState newState){
     currentState = newState;
@@ -198,7 +205,7 @@ public class Roulette implements Subject, ActionListener {
   }
 
   /***
-   * The final step towards glory: Spint the roulette!
+   * The final step towards glory: Spin the roulette!
    * After this, go back to the SelectNumber state again
    */
   public void spinRoulette(){
@@ -208,11 +215,55 @@ public class Roulette implements Subject, ActionListener {
     isSpinning = true;
     notifyObservers();
 
-    // Return to SelectNumberState
-    currentState.spinRoulette(this);
-    isSpinning = false;
+    // Won the game?
+    if (wonGame()){
+      toYouWin();
+    }
+    // Lost the game?
+    else if(lostGame())
+    {
+      toGameOver();
+    }
+    // Continue the game if not
+    else{
+      // Return to SelectNumberState
+      currentState.spinRoulette(this);
+      isSpinning = false;
+      notifyObservers();
+    }
+  }
+
+  /***
+   * Go to the Game Over screen
+   */
+  public void toGameOver()
+  {
+    currentState.toGameOver(this);
     notifyObservers();
   }
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /***
+   * Go to the You Win screen
+   */
+  public void toYouWin()
+  {
+    currentState.toYouWin(this);
+    notifyObservers();
+  }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ WIN/LOSE CONDITIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  public boolean wonGame()
+  {
+    return user.getPlayerCredits() >= 20000 || npc.getPlayerCredits() <= 0;
+  }
+
+  public boolean lostGame()
+  {
+    return user.getPlayerCredits() <= 0;
+  }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }

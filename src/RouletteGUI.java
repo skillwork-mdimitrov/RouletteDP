@@ -172,6 +172,17 @@ public class RouletteGUI implements Observer{
       lockNumberBtn.setEnabled(false);
     }
 
+    // You Win screen
+    if (roulette.getState() instanceof YouWinState)
+    {
+      paintYouWin();
+    }
+
+    // Game Over screen
+    if (roulette.getState() instanceof GameOverState)
+    {
+      paintGameOver();
+    }
   }
 
   /***
@@ -254,5 +265,31 @@ public class RouletteGUI implements Observer{
     amountAndBetPanel.add(npcAmountAndBet, BorderLayout.LINE_END);
 
     panel.add(amountAndBetPanel, BorderLayout.PAGE_END);
+  }
+
+
+  /***
+   * Paint the 'You Win' screen
+   */
+  private void paintYouWin()
+  {
+    Container container = frame.getContentPane();
+    container.removeAll();
+
+
+    container.repaint();
+  }
+
+  /***
+   * Paint the 'Game Over' screen
+   */
+  private void paintGameOver()
+  {
+    Container container = frame.getContentPane();
+    container.removeAll();
+
+    // TODO Add GameOver screen here
+
+    container.repaint();
   }
 }
