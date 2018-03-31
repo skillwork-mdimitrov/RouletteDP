@@ -144,6 +144,7 @@ public class RouletteGUI implements Observer{
     if (roulette.getState() instanceof  SelectNumberState)
     {
       selectNumberLbl.setText("|| Your selected number: unknown ||");
+      roulette.enableAllNumberButtons(true);
       increaseBetBtn.setEnabled(false);
       decreaseBetBtn.setEnabled(false);
       lockNumberBtn.setEnabled(false);
@@ -153,6 +154,7 @@ public class RouletteGUI implements Observer{
     if (roulette.getState() instanceof PlaceBetState)
     {
       selectNumberLbl.setText("|| Your selected number: " + roulette.getUser().getBetObject().getBetNumber() + "||");
+      roulette.enableAllNumberButtons(false);
       increaseBetBtn.setEnabled(true);
       decreaseBetBtn.setEnabled(true);
       lockNumberBtn.setEnabled(true);
@@ -162,6 +164,7 @@ public class RouletteGUI implements Observer{
     if (roulette.getState() instanceof SpinRouletteState)
     {
       selectNumberLbl.setText("|| Your selected number: " + roulette.getUser().getBetObject().getBetNumber() + "||");
+      roulette.enableAllNumberButtons(false);
       increaseBetBtn.setEnabled(false);
       decreaseBetBtn.setEnabled(false);
       lockNumberBtn.setEnabled(false);
