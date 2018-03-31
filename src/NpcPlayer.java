@@ -32,22 +32,23 @@ public class NpcPlayer implements Player{
 
   @Override
   public void update(Object obj) {
-    // Roulette pushing notifications
-    if(obj instanceof Roulette) {
-      NpcPlayer npc = ((Roulette) obj).getNpc();
-      // Make a bet, accordingly to credits
-      npc.getBetObject().setBet(strategicallyMakeBet());
 
-      if(((Roulette) obj).didNPCWon()) {
-        npc.increasePlayerCredits(npc.getBetObject().getBet());
-      }
-      else {
-        npc.decreasePlayerCredits(npc.getBetObject().getBet());
+    // Roulette pushing notifications
+    Roulette rouletteObj = (Roulette)obj;
+
+    // Check if you have won from that spin
+    if (rouletteObj.getState() instanceof SpinRouletteState) {
+
+      // Make a bet, accordingly to credits
+      getBetObject().setBet(strategicallyMakeBet());
+
+      if (((Roulette) obj).didNPCWon()) {
+        increasePlayerCredits(getBetObject().getBet());
+      } else {
+        decreasePlayerCredits(getBetObject().getBet());
       }
       // Reset the bet
-      npc.getBetObject().resetBet();
-
-
+      getBetObject().resetBet();
     }
   }
 

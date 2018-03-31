@@ -1,32 +1,21 @@
 // Who handles if bet goes below 0?
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-public class Bet implements Subject {
+public class Bet{
   private int betNumber = 0;
   private int bet = 0; // initially 0
   private boolean confirmedBet = false;
-  private List<Observer> observers;
-
-  Bet() {
-    observers = new ArrayList<Observer>();
-  }
 
   /// Manipulate Bet
   public void increaseBet() {
     // Possibly add if confirmed bet = false check
     if(!isConfirmedBet()) {
       bet += 500;
-      notifyObservers();
     }
   }
   public void decreaseBet() {
     // Possibly add if confirmed bet = false check
     if(!isConfirmedBet()) {
       bet -= 500;
-      notifyObservers();
     }
   }
 
@@ -45,6 +34,7 @@ public class Bet implements Subject {
   // Reset bet
   public void resetBet() {
     bet = 0;
+    confirmedBet = false;
   }
 
   // Retrieve how much is the bet
@@ -54,31 +44,5 @@ public class Bet implements Subject {
 
   public boolean isConfirmedBet() {
     return confirmedBet;
-  }
-
-  @Override
-  public void register(Observer observer) {
-    if(observer != null) {
-      this.observers.add(observer);
-    }
-    else {
-      System.out.println("Null object passed");
-    }
-  }
-
-  @Override
-  public void unregister(Observer observer) {
-    if(observer != null) {
-      this.observers.remove(observer);
-    }
-  }
-
-  @Override
-  public void notifyObservers() {
-    Iterator<Observer> it = observers.iterator();
-    while (it.hasNext()) {
-      Observer observer = it.next();
-      observer.update(this);
-    }
   }
 }

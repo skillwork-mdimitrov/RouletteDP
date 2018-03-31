@@ -23,7 +23,6 @@ public class Roulette implements Subject, ActionListener {
   private boolean youWon = false;
   private boolean npcWon = false;
   private boolean numberLocked = false;
-  private RouletteGUI rouletteGUI;
   private List<Observer> observers;
 
   // ~~~ TESTING
@@ -56,6 +55,18 @@ public class Roulette implements Subject, ActionListener {
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETTERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  /* Increase bet */
+  public void increaseUserBet(){
+    user.getBetObject().increaseBet();
+    notifyObservers();
+  }
+
+  /* Decrease bet */
+  public void decreaseUserBet(){
+    user.getBetObject().decreaseBet();
+    notifyObservers();
+  }
 
   /* Set winning number */
   public void setWinningNumber(int winningNumber) {
@@ -123,6 +134,15 @@ public class Roulette implements Subject, ActionListener {
     }
   }
 
+  // Enable or disable all number buttons
+  public void enableAllNumberButtons(boolean enable)
+  {
+    for (Button button : buttonsList) {
+      JButton jButton = (JButton)button;
+      jButton.setEnabled(enable);
+    }
+  }
+
   @Override
   public void register(Observer observer) {
     if(observer != null) {
@@ -156,18 +176,26 @@ public class Roulette implements Subject, ActionListener {
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATE HANDLERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  public GameState getState(){ return currentState; }
   public void setState(GameState newState){
     currentState = newState;
   }
 
   public void selectNumber(int number){
     user.setBetNumber(number);
+
     // Randomly let the opponent bet here
+
     currentState.selectNumber(this);
+
+    // Notify the observers
+    notifyObservers();
   }
 
   public void placeBet(){
+
     currentState.placeBet(this);
+    notifyObservers();
   }
 
   public void spinRoulette(){
@@ -176,6 +204,7 @@ public class Roulette implements Subject, ActionListener {
     notifyObservers();
 
     currentState.spinRoulette(this);
+    notifyObservers();
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

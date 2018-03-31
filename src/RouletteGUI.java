@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class RouletteGUI implements Observer{
   private Roulette roulette;
@@ -22,7 +23,7 @@ public class RouletteGUI implements Observer{
   RouletteGUI() {
     roulette = new Roulette();
     roulette.register(this);
-    roulette.getUser().getBetObject().register(this);
+    //roulette.getUser().getBetObject().register(this);
 
     // ~~~ Labels ~~~
     rouletteLabel = new JLabel();
@@ -41,7 +42,7 @@ public class RouletteGUI implements Observer{
     betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
 
     selectNumberLbl = new JLabel();
-    selectNumberLbl.setText("|| Choose a number ||");
+    selectNumberLbl.setText("|| Your selected number: Unknown ||");
 
     // ~~~ Buttons ~~
     increaseBetBtn = new JButton("+");
@@ -49,7 +50,7 @@ public class RouletteGUI implements Observer{
     increaseBetBtn.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        roulette.getUser().getBetObject().increaseBet();
+        roulette.increaseUserBet();
       }
     });
 
@@ -58,7 +59,7 @@ public class RouletteGUI implements Observer{
     decreaseBetBtn.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        roulette.getUser().getBetObject().decreaseBet();
+        roulette.decreaseUserBet();
       }
     });
 
@@ -83,6 +84,11 @@ public class RouletteGUI implements Observer{
         roulette.spinRoulette();
       }
     });
+
+    // Disable all buttons at first
+    increaseBetBtn.setEnabled(false);
+    decreaseBetBtn.setEnabled(false);
+    lockNumberBtn.setEnabled(false);
 
     makeFrame(); // don't move upwards
   }
@@ -127,25 +133,39 @@ public class RouletteGUI implements Observer{
     return roulette;
   }
 
-  // scrap this POTENTIALLY
-//  public void actionPerformed(ActionEvent e) {
-//    if(!roulette.isNumberLocked()) {
-//      try {
-//        roulette.setSelectedNumber(Integer.parseInt(e.getActionCommand()));
-//        selectNumberLbl.setText("Your number: " + roulette.getSelectedNumber() + "");
-//      } catch (Exception ex) { }
-//    }
-//  }
-
   @Override
   public void update(Object obj) {
-    if(obj instanceof Roulette) {
-      yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
-      npcAmountLbl.setText("|| Npc amount: " + roulette.getNpc().getPlayerCredits() + "||");
+
+    // Update all the labels ALWAYS
+    selectNumberLbl.setText("|| Your selected number: " + roulette.getUser().getBetObject().getBetNumber() + "||");
+    yourAmountLbl.setText("|| Your amount: " + roulette.getUser().getPlayerCredits() + "||");
+    betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
+    npcAmountLbl.setText("|| Npc amount: " + roulette.getNpc().getPlayerCredits() + "||");
+
+    // SelectNumberState specific GUI updates
+    if (roulette.getState() instanceof  SelectNumberState)
+    {
+      increaseBetBtn.setEnabled(false);
+      decreaseBetBtn.setEnabled(false);
+      lockNumberBtn.setEnabled(false);
     }
-    if(obj instanceof Bet) {
-      betAmountLbl.setText("|| Bet: " + roulette.getUser().getBetObject().getBet() + "||");
+
+    // PlaceBetState specific GUI updates
+    if (roulette.getState() instanceof PlaceBetState)
+    {
+      increaseBetBtn.setEnabled(true);
+      decreaseBetBtn.setEnabled(true);
+      lockNumberBtn.setEnabled(true);
     }
+
+    // SpinRouletteState specific GUI updates
+    if (roulette.getState() instanceof SpinRouletteState)
+    {
+      increaseBetBtn.setEnabled(false);
+      decreaseBetBtn.setEnabled(false);
+      lockNumberBtn.setEnabled(false);
+    }
+
   }
 
   /***
@@ -200,8 +220,12 @@ public class RouletteGUI implements Observer{
     JPanel amountAndBetPanel = new JPanel(new BorderLayout());
     amountAndBetPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 50));
 
+    JPanel yourSelectedNumberAmountAndBet = new JPanel(new BorderLayout());
     JPanel yourAmountAndBet = new JPanel(new BorderLayout());
     JPanel npcAmountAndBet = new JPanel(new BorderLayout());
+
+    // Your selected number
+    yourSelectedNumberAmountAndBet.add(selectNumberLbl, BorderLayout.PAGE_START);
 
     // Your amount and bet
     yourAmountAndBet.add(yourAmountLbl, BorderLayout.PAGE_START);
@@ -213,11 +237,13 @@ public class RouletteGUI implements Observer{
     yourBetPanel.add(lockNumberBtn, BorderLayout.PAGE_END);
     yourAmountAndBet.add(yourBetPanel, BorderLayout.PAGE_END);
 
+    yourSelectedNumberAmountAndBet.add(yourAmountAndBet, BorderLayout.PAGE_END);
+
     // NPC amount and bet
     npcAmountAndBet.add(npcAmountLbl, BorderLayout.PAGE_START);
     npcAmountAndBet.add(new JLabel("A very nice bet"), BorderLayout.PAGE_END);
 
-    amountAndBetPanel.add(yourAmountAndBet, BorderLayout.LINE_START);
+    amountAndBetPanel.add(yourSelectedNumberAmountAndBet, BorderLayout.LINE_START);
     amountAndBetPanel.add(npcAmountAndBet, BorderLayout.LINE_END);
 
     panel.add(amountAndBetPanel, BorderLayout.PAGE_END);

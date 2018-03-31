@@ -31,19 +31,22 @@ public class User implements Player{
   @Override
   public void update(Object obj) {
 
-    // Roulette is pushing the notifications
-    if(obj instanceof Roulette) {
-      User user = ((Roulette) obj).getUser();
+    // Roulette pushing notifications
+    Roulette rouletteObj = (Roulette)obj;
 
-      // Check if you have won from that spin
-      if(((Roulette) obj).didYouWin()) {
+    // Check if you have won from that spin
+    if (rouletteObj.getState() instanceof SpinRouletteState)
+    {
+      if(rouletteObj.didYouWin()) {
         // You won, increase credits
-        user.increasePlayerCredits(user.getBetObject().getBet());
+        increasePlayerCredits(getBetObject().getBet());
       }
       else {
         // You lost, deduct credits
-        user.decreasePlayerCredits(user.getBetObject().getBet());
+        decreasePlayerCredits(getBetObject().getBet());
       }
+
+      getBetObject().resetBet();
     }
   }
 
